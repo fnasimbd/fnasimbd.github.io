@@ -25,3 +25,22 @@ And the downside is that you may have to sacrifice performance for immutability:
 1. [Mutable and Immutable Objects](http://www.javaranch.com/journal/2003/04/immutable.htm) tutorial at *Java Ranch* by David O'Meara.
 2. [C# StringBuilder source code](http://referencesource.microsoft.com/#mscorlib/system/text/stringbuilder.cs,adf60ee46ebd299f) at *Microsoft Reference Source*.
 
+{% if page.comments %}
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    // Required: on line below, replace text in quotes with your forum shortname
+    var disqus_shortname = 'FORUM SHORTNAME GOES HERE';
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+{% endif %}
+
