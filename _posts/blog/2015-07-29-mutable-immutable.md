@@ -5,6 +5,7 @@ modified:
 categories: blog
 excerpt:
 tags: ["object-oriented-programming", "random-notes"]
+comments: true
 date: 2015-07-29T02:58:00-05
 ---
 
