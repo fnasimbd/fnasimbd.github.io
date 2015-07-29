@@ -26,12 +26,10 @@ And the downside is that you may have to sacrifice performance for immutability:
 2. [C# StringBuilder source code](http://referencesource.microsoft.com/#mscorlib/system/text/stringbuilder.cs,adf60ee46ebd299f) at *Microsoft Reference Source*.
 
 {% if page.comments %}
-
 <div id="disqus_thread"></div>
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */
-    // Required: on line below, replace text in quotes with your forum shortname
-    var disqus_shortname = 'FORUM SHORTNAME GOES HERE';
+    var disqus_shortname = 'fnasim';
     
     /* * * DON'T EDIT BELOW THIS LINE * * */
     (function() {
