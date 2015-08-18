@@ -145,7 +145,9 @@ You are done!
 
 #### Installation
 
-From Visual Studio, right click on solution or project and click *Manage NuGet Packages...*, choose your feed, find the package you want, and click install.
+Now let's install the package, Miscellaneous, we created earlier in another project. Open the target project in Visual Studio, right click on solution or project in solution explorer and click *Manage NuGet Packages...*, in the Online tab find the source we configured earlier. What you see is kind of package browser: all packages available in the current feed is listed here. The package Miscellaneous should be visible in the package browser; click the install button beside it.
+
+![install-package]({{site.url}}/images/install-package.png)
 
 If your package installation is successful, two changes occur to your project: a new folder called *packages* is created under your solution directory and a file called *packages.config* is included in your project. The 'packages' folder contains the package you just installed and all further packages you install in any other project under the same solution; the 'packages.config' file contains information of the packages the project uses in XML format.
 
