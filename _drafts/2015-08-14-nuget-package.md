@@ -16,7 +16,7 @@ I found the following benefits of an automated package management system:
 
 - **Ease of distribution**. Automated package management systesm distribute packages through a common package repository; this way publishers know where to publish and consumers know where to look for updates.
 - **Improved portability**. Solutions can be distributed without worrying about dependencies.
-- **Preservation of integratiy**. As long as consumers pick up packages from the common repository---rather than some other random source---they know they have the right thing.
+- **Preservation of integrity**. As long as consumers pick up packages from the common repository---rather than some other random source---they know they have the right thing.
 - **Enhanced communication**. Publishers don't need to inform consumers: for updates just check the repository. Also consumers risk less missing an update by checking for updates routinely.
 - **Leverages further automation**. Automated package management enables adhering to further automations like continuous integration.
 
@@ -24,21 +24,17 @@ I found the following benefits of an automated package management system:
 
 Most open software platforms took package management seriously. Their dependencey management tools have been around for about a decade: like Java world has *Maven* since 2002.
 
-.NET world, however, joined the race much later. Their solution to the dependency problem is *NuGet*: it is a package manager for .NET packages, originally developed by *Outercurve Foundation* and now owned by *.NET Foundation*(?). Since its introduction in 2010 it went popular rapidly: at present [Nuget.org](http://www.nuget.org), the official .NET Foundation public NuGet package feed, hosts over 40,000 packages. These days NuGet is ubiquitous and it is the de facto standard in .NET world.
+.NET world, however, joined the race much later. Their solution to the dependency problem is *NuGet*: a package manager for .NET packages, originally developed by *Outercurve Foundation* and now owned by *.NET Foundation*(?). Since its introduction in 2010 it went popular rapidly: at present [Nuget.org](http://www.nuget.org), the official .NET Foundation public NuGet package feed, hosts over 40,000 packages. These days NuGet is ubiquitous and it is the de facto standard in .NET world.
 
 # How NuGet Works
 
-I will give brief overview of NuGet's working principle---the amount sufficient to make it work in simple situations. NuGet is highly configurable and supports many advanced features that gives you lot more flexibility in handling complex environments. I plan to cover those details in a future article.
+I will give brief overview of NuGet's working principle---the amount sufficient to make it work in simple situations. As I cover each concept, I will leave references for further study. NuGet is highly configurable and supports many advanced features that gives you lot more flexibility in handling complex environments. I plan to cover advanced usage of NuGet in a future article.
 
 #### NuGet Package File
 
 NuGet packages a project's build artifacts into a `.nupkg` archive for distribution. It includes project output (class library or executable), auxiliary files (configurations), other dependencies, etc. Open a .nupkg file with WinRAR and explore what's inside for better understanding.
 
 NuGet maintains versioning to facilitate tracking.
-
-#### NuGet Project Manifest File
-
-Each package published by NuGet is coupled with a manifest file: it is a configuration file with XML structre. In this file user specifies what to copy and how etc.
 
 #### NuGet Package Schema
 
@@ -48,7 +44,36 @@ NuGet organizes package contents in the following file schema:
     |--lib
     |--content
 
-For short, the project output (class library or executable) is copied to `lib` and all contents inside the `content` folder is copied to the target project's root path.
+For short, the contents inside `lib` are added to the target project's reference and contents of the `content` folder is copied to the target project's root path.
+
+#### NuGet Project Manifest File
+
+Each package published by NuGet is coupled with a manifest file (an XML configuration file.) In this file user specifies what to copy and how etc. Here is how a nuspec file looks like on its creation:
+
+{% highlight xml linenos %}
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>http://LICENSE_URL_HERE_OR_DELETE_THIS_LINE</licenseUrl>
+    <projectUrl>http://PROJECT_URL_HERE_OR_DELETE_THIS_LINE</projectUrl>
+    <iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <releaseNotes>Summary of changes made in this release of the package.</releaseNotes>
+    <copyright>Copyright 2015</copyright>
+    <tags>Tag1 Tag2</tags>
+  </metadata>
+</package>
+{% endhighlight %}
+
+Only *id*, *version*, *title*, and *author* in metadata section are mandatory.
+
+For exahustive coverage see official [Nuspec reference](https://docs.nuget.org/Create/NuSpec-Reference).
 
 #### NuGet Tools
 
@@ -61,7 +86,7 @@ It consists of the following two key components:
 
 The following commands are sufficent for basic NuGet operations. For the exhaustive list see [official command line reference](https://docs.nuget.org/consume/command-line-reference).
 
-- **Pack.** Creates a new package.
+- **Pack.** Creates a new package from project manifest file.
 - **Install.** Installs a package.
 - **Update.** Updates an already installed package.
 - **Restore.** Downloads a missing package from repo.
@@ -77,31 +102,37 @@ Setup a network path with write permission to package authors and read permissio
 
 # Authoring NuGet packages
 
-1. Choose a project to publish. Create the project manifest `project-name.nuspec` file with this command:
+I will create and publish a C# project called *Miscellaneous*; its output is class library. Open Command Prompt or Powershell and switch to your project directory.
 
-        nuget spec project-name
+1. Create the project manifest `Miscellaneous.nuspec` file with this command:
 
-2. Fill in the mandatory fields in the .nuspec file. Some fields will be picked up from project's assemby resource file.
+        nuget spec Miscellaneous
+
+2. Fill in the mandatory fields in the project's assembly info file.
 
 3. Update assembly version. NuGet uses [semantic versioning](http://semver.org). For simplicity, just keep this in mind: "NuGet updates packages only if minor version or patch verstion is updated." See [NuGet Versioning Reference](http://docs.nuget.org/Create/Versioning) for details.
 
 4. Build the project.
 
-5. Build package with the followig command:
+5. Build package with the following command:
 
-        pack project-name
+        nuget pack Miscellaneous.csproj
+
+    The package file, named Miscellaneous.version.nupkg, is created.
 
 6. Move package to feed location.
 
-        move project-name.nupkg repo-location
+        move Miscellaneous.version.nupkg \\farhan-lenovo\nuget-feed
 
 Publishing done!
 
 # Using NuGet Packages
 
+You can consume NuGet packages through both the command line utility and the Visual Studio extension. The Visual Studio extension is, however, easy to use and manages packages more conveniently.
+
 #### Configuring Package Source
 
-First step to using NuGet packages is to configure your package sources. By default nuget.org feed is available in Visual Studio. To add your own feed, do the following steps.
+First step to using NuGet packages is to configure your package sources. By default only one, nuget.org, feed is available in the Visual Studio extension. To add your own feed, do the following steps.
 
 1. Open NuGet Package Manager configuration dialog box in Visual Studio (Goto *Tools* > *NuGet Package Manager* > *Package Manager Settings* > *Package Sources*.)
 2. Click the **+** sign near the top-right corner.
@@ -114,11 +145,9 @@ You are done!
 
 #### Installation
 
-Open Package Manager Console, choose your package source from dropdown, and run
-
-    Install-Package package-name
-
 From Visual Studio, right click on solution or project and click *Manage NuGet Packages...*, choose your feed, find the package you want, and click install.
+
+If your package installation is successful, two changes occur to your project: a new folder called *packages* is created under your solution directory and a file called *packages.config* is included in your project. The 'packages' folder contains the package you just installed and all further packages you install in any other project under the same solution; the 'packages.config' file contains information of the packages the project uses in XML format.
 
 #### Updating
 
