@@ -9,5 +9,5 @@ image:
   #creditlink: http://wegraphics.net/downloads/free-ultimate-blurred-background-pack/
 ---
 
-I am a software engineer at a Bangldesh based company.
+Software engineer at a Bangladesh based company.
 
