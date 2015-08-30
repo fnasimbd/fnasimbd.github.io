@@ -9,5 +9,5 @@ image:
   #creditlink: http://wegraphics.net/downloads/free-ultimate-blurred-background-pack/
 ---
 
-Software engineer at a Bangladesh based company.
+Software engineer at a Bangladesh based company. Interested in algorithms, mathematics, software architecture, etc.
 
