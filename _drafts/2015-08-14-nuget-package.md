@@ -154,15 +154,17 @@ You are done!
 
 #### Installation
 
-Now let's install the package we created earlier, called Miscellaneous, in some other project. Open the target project in Visual Studio, right click on solution or project in solution explorer and click *Manage NuGet Packages...*, in the Online tab find the source we configured earlier. What you see is kind of package browser: all packages available in the current feed is listed here. The package Miscellaneous should be visible in the package browser; click the install button beside it.
+Now let's install the package we published earlier, called Miscellaneous, in some other project. Open the target project in Visual Studio, go to *Tools > NuGet Package Manager > Manage NuGet Packages for Solution...* The package browser window will appear; in the Online tab find and select the source we configured earlier. All packages available in the current feed is listed here. The package Miscellaneous should be visible here. Click the install button beside it.
 
 ![install-package]({{site.url}}/images/install-package.png)
 
-If your package installation is successful, you will see these two changes in your project: a new folder called *packages* is created under your solution directory and a file called *packages.config* is included in your project. The 'packages' folder contains the package you just installed and all further packages you install in any other project under the same solution; the 'packages.config' file contains information of the packages the project uses in XML format.
+If your package installation is successful, you will see these changes in your project: a library called Miscellaneous.dll is added to the project references, a new folder called *packages* is created under your solution directory, and a file called *packages.config* is included in your project. The 'packages' folder contains the package you just installed and all further packages you install in any other project under the same solution; the 'packages.config' file contains information of the packages the project uses in XML format.
 
 #### Updating
 
-Open Package Manager Console, choose package source, and run
+Suppose you have made some changes to the package Miscellaneous and want to publish a new version. Make the changes you want and follow steps 3 to 6 in section *Authoring NuGet Packages*. You have the new version published.
+
+To get the update, open Package Manager Console, choose package source, and run
 
     Update-Package package-name
 
