@@ -8,9 +8,9 @@ comments: true
 
 # Package Management Very Briefly
 
-Large software project's depend on several other components (called *dependencies*); those may be developed by other in-house teams or may come from external sources. Users of the dependency must make sure that they have the right dependency (package version, framework version, cpu architecture, etc.) Each time a dependency has updates the project must be tested for integration: to check if a bug is indeed fixed, if a new feature is really in effect, if the update introduces any side effects, etc.
+Large software projects depend on several other components (called *dependencies*); those may be developed by other in-house teams or may come from external sources. The same dependency may be built for different platforms, different CPU architectures, or available in different variants. Users of the dependency must make sure that they have the right dependency. Each time a dependency has updates the project must be tested for integration: to check if a bug is indeed fixed, if a new feature is really in effect, if the update introduces any side effects, etc.
 
-For small projects with few dependency and only a handful of developer's working on it, manual management works well. As project gets larger and more complex, it's dependency also grows, so does the complexity of their management. Lack of structured package management may cause tremendous frustration and waste of valuable development hours. Moreover these effort deosn't contribute anything to the product's excellence. An automated package management is the only rescue in these situations.
+For small projects, with few dependencies and only a handful of developers working on it, manual management works well. As project gets larger and more complex, its dependency also grows, so does the complexity of their management. Lack of structured package management may cause tremendous frustration and waste of development hours. Moreover these effort deosn't contribute anything to the product's excellence. An automated package management is the only rescue in these situations.
 
 I found the following benefits of an automated package management system:
 
