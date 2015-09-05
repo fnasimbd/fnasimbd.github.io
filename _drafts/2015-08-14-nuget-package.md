@@ -10,7 +10,7 @@ comments: true
 
 Large software projects depend on several other components: called *dependencies*; those maybe developed by other in-house teams or may come from external sources. The same dependency maybe built for several platform and CPU architecture combinations, or possibly available in several variants. Consumers of a dependency must make sure that they have the right version and variant. Moreover, if the dependency itself is under development, each time an update is released the consumer project may need to pull and integrate that update. Additionaly, as a project's source is distributed to other developers so must be the dependencies---preferably from a central repository. Most importantly, all of these must happen with least confusion and time.
 
-For small projects, with few dependencies and only a handful of developers working on it, manual management works well. As projects get larger and more complex, their dependency also grows, so does the complexity of their management. Lack of structured package management may cause tremendous frustration and waste of development hours. Moreover these effort doesn't contribute anything to the product's excellence. An automated package management is the only rescue in these situations.
+Small projects, with few dependencies and only a handful of developers working on it, can get away with manual management. As projects get larger and more complex, their dependency also grows, so does the complexity of their management. Lack of structured package management may cause tremendous frustration and waste of development hours. Moreover these effort doesn't contribute anything to the product's excellence. An automated package management is the only rescue in these situations.
 
 I found the following benefits of an automated package management system:
 
@@ -116,7 +116,7 @@ Open Command Prompt or Powershell and switch to your project directory.
 
         nuget spec Miscellaneous
 
-2. Fill in the mandatory fields, *AssemblyDescription* and *AssemblyCompany*, in the project's AssemblyInfo.cs file. 
+2. Fill in the usually missing mandatory fields, *AssemblyDescription* and *AssemblyCompany*, in the project's AssemblyInfo.cs file. 
 
 3. Update assembly version.
 
