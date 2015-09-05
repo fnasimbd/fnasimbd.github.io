@@ -20,8 +20,6 @@ I found the following benefits of an automated package management system:
 - **Enhanced communication**. Publishers don't need to inform consumers: for updates just check the repository. Also consumers risk less missing an update by checking for updates routinely.
 - **Leverages further automation**. Automated package management enables adhering to further automations like continuous integration.
 
-Even operating systems with sound dependency management has lower issues. I use both Windows and Linux; I find that Linux has lower CPU architecture mismatch issue.
-
 # What is NuGet
 
 Most open software platforms took package management seriously. Their dependencey management tools have been around for about a decade: like Java world has *Maven* since 2002.
@@ -79,19 +77,20 @@ For exahustive coverage see official [Nuspec reference](https://docs.nuget.org/C
 
 #### NuGet Tools
 
-A NuGet environment consists of the following two key components:
+A NuGet ecosystem consists of the following two key components:
 
-1. **NuGet client.**
-2. **NuGet feed.**
+1. **NuGet client.** Mainly a command line utility though other variants are avilable. It coordinates both package publication and consumption.
+2. **NuGet feed.** Provider of NuGet packages; can be a network shared directory or an http server.
 
 #### NuGet Commands
 
 The following commands are sufficent for basic NuGet operations. For the exhaustive list see [official command line reference](https://docs.nuget.org/consume/command-line-reference).
 
-- **Pack.** Creates a new package from project manifest file.
-- **Install.** Installs a package.
-- **Update.** Updates an already installed package.
-- **Restore.** Downloads a missing package from repo.
+- [**Spec.**](https://docs.nuget.org/Consume/Command-Line-Reference#spec-command) Creates .nuspec file.
+- [**Pack.**](https://docs.nuget.org/Consume/Command-Line-Reference#pack-command) Creates a new package from project manifest file.
+- [**Install.**](https://docs.nuget.org/Consume/Command-Line-Reference#install-command) Installs a package.
+- [**Update.**](https://docs.nuget.org/Consume/Command-Line-Reference#update-command) Updates an already installed package.
+- [**Restore.**](https://docs.nuget.org/Consume/Command-Line-Reference#restore-command) Downloads a missing package from repo.
 
 # Setting Up NuGet
 
@@ -133,7 +132,7 @@ Open Command Prompt or Powershell and switch to your project directory.
 
         move Miscellaneous.version.nupkg \\farhan-lenovo\nuget-feed
 
-Publishing first release of the project done! Assuming you don't change the package's meta information, to publish every next version, performing steps 3 to 6 will do.
+Publishing first release of the project done! Assuming you don't change meta information of the package, to publish every next version, performing steps 3 to 6 will do.
 
 # Using NuGet Packages
 
@@ -158,23 +157,21 @@ Now let's install the package we published earlier, called Miscellaneous, in som
 
 ![install-package]({{site.url}}/images/install-package.png)
 
-If your package installation is successful, you will see these changes in your project: a library called Miscellaneous.dll is added to the project references, a new folder called *packages* is created under your solution directory, and a file called *packages.config* is included in your project. The 'packages' folder contains the package you just installed and all further packages you install in any other project under the same solution; the 'packages.config' file contains information of the packages the project uses in XML format.
+If your package installation is successful, you will see these changes in your project: a library called Miscellaneous.dll is added to the project references, a new folder called *packages* is created under your solution directory, and a file called *packages.config* is included in your project. The 'packages' folder contains the package you just installed and all further packages you install in any other project under the same solution; the 'packages.config' file contains information of the packages the project depends on in XML format.
 
 #### Updating
 
-Suppose you have made some changes to the package Miscellaneous and want to publish a new version. Make the changes you want and follow steps 3 to 6 in section *Authoring NuGet Packages*. You have the new version published.
+Suppose you have made some changes to the package Miscellaneous and want to publish a new version. Make the changes you wish and follow steps 3 to 6 in section *Authoring NuGet Packages* to have the new version published.
 
-To get the update, open Package Manager Console, choose package source, and run
+To get the update, open package browser window just the way we did it during installation, select the 'Updates' tab, select 'Test Package Source.' The package 'Miscellaneous' should appear with an 'Update' button beside it. Click the 'Update' button to install the updated package.
 
-    Update-Package package-name
-
-Find the package in *Installed Packages* list and click update.
+![update-package]({{site.url}}/images/update-package.png)
 
 #### Uninstalling
 
-Open package manager console, and run
+Open package browser window, select 'Installed Packages' tab. The package 'Miscellaneous' should appear here with an 'Uninstall' button beside it. Click that Uninstall button. Package is uninstalled; the reference to 'Miscellaneous.dll' as well as the folder 'Miscellaneous' in packages folder under solution directory disappears if uninstallation is successful.
 
-    Uninstall-Package package-name
+![uninstall-package]({{site.url}}/images/uninstall-package.png)
 
 # Routine Practices
 
