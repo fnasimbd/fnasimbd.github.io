@@ -6,31 +6,25 @@ date: 2015-08-14-T23:27:00-05
 comments: true
 ---
 
-# Package Management Very Briefly
+# Package Management: Very Briefly
 
 Large software projects depend on several other components: called *dependencies*; those maybe developed by other in-house teams or may come from external sources. The same dependency maybe built for several platform and CPU architecture combinations, or possibly available in several variants. Consumers of a dependency must make sure that they have the right version and variant. Moreover, if the dependency itself is under development, each time an update is released the consumer project may need to pull and integrate that update. Additionaly, as a project's source is distributed to other developers so must be the dependencies---preferably from a central repository. Most importantly, all of these must happen with least confusion and time.
 
-Small projects, with few dependencies and only a handful of developers working on it, can get away with manual management. As projects get larger and more complex, their dependency also grows, so does the complexity of their management. Lack of structured package management may cause tremendous frustration and waste of development hours. Moreover these effort doesn't contribute anything to the product's excellence. An automated package management is the only rescue in these situations.
+Small projects, with few dependencies and only a handful of developers working on it, can get away with manual management. As projects get larger and more complex, their dependency also grows, so does the complexity of their management. Lack of structured package management causes tremendous confusion---and resultant frustration---among developers; they spend hours after tasks that doesn't contribute anything to the product's excellence. An automated package management is the only rescue in these situations.
 
-I found the following benefits of an automated package management system:
-
-- **Ease of distribution**. Automated package management systesm distribute packages through a common package repository; this way publishers know where to publish and consumers know where to look for updates.
-- **Improved portability**. Solutions can be distributed without worrying about dependencies (whether the user platform is x86 or x64 etc.)
-- **Preservation of integrity**. As long as consumers pick up packages from the common repository---rather than some other random source---they know they have the right thing.
-- **Enhanced communication**. Publishers don't need to inform consumers: for updates just check the repository. Also consumers risk less missing an update by checking for updates routinely.
-- **Leverages further automation**. Automated package management enables adhering to further automations like continuous integration.
+To be short, in an automated package management ecosystem, package authors push their packages to a repository and consumers pull their desired ones from that repository. Commonly the same application handles both the push and pull operations: this application is called a *package manager* or *dependency manager*. Automated package manager takes over the package related drudgery and relieves developers from a lot of pain.
 
 # What is NuGet
 
 Most open software platforms took package management seriously. Their dependencey management tools have been around for about a decade: like Java world has *Maven* since 2002.
 
-.NET world, however, joined the race much later. Their solution to the dependency problem is *NuGet*: a package/library manager for .NET languages, originally developed by *Outercurve Foundation* and now owned by *.NET Foundation*(?). Since its introduction in 2010 it went popular rapidly: at present [Nuget.org](http://www.nuget.org), the official .NET Foundation public NuGet package feed, hosts over 40,000 packages. These days NuGet is ubiquitous and it is the de facto standard in .NET world.
+.NET world, however, joined the race much later. Their solution to the dependency problem is *NuGet*: a package/library manager for .NET languages, originally developed by *Outercurve Foundation* and now owned by *.NET Foundation*. Since its introduction in 2010 it went popular rapidly: at present [Nuget.org](http://www.nuget.org), the official .NET Foundation public NuGet package feed, hosts over 40,000 packages. These days NuGet is ubiquitous and it is the de facto standard in .NET world.
 
 # How NuGet Works
 
-In this section, I will give brief overview of NuGet's working method and the concepts involved; this will be sufficient to make it work in very simple situations. In later sections I will cover installing NuGet, publishing a sample C# project as a NuGet package, and consuming that package.
+In this section, I will give brief overview of NuGet's working method and the concepts involved, and in later sections, I will cover installing NuGet, publishing a sample C# project as a NuGet package, and consuming that package.
 
-NuGet is, however, highly configurable and supports many advanced features that lets you handle complex environments. I will leave references for further study wherever relevant.
+This will be sufficient to make it work in very simple situations. NuGet is, however, highly configurable and supports many advanced features that lets you handle complex environments. I will leave references for further study wherever relevant.
 
 #### NuGet Package File
 
@@ -172,15 +166,6 @@ To get the update, open package browser window just the way we did it during ins
 Open package browser window, select 'Installed Packages' tab. The package 'Miscellaneous' should appear here with an 'Uninstall' button beside it. Click that Uninstall button. Package is uninstalled; the reference to 'Miscellaneous.dll' as well as the folder 'Miscellaneous' in packages folder under solution directory disappears if uninstallation is successful.
 
 ![uninstall-package]({{site.url}}/images/uninstall-package.png)
-
-# Routine Practices
-
-For best outcome, form your team's consensus on the following practices---or in their modification or augmentation as you find convenient.
-
-1. Create the manifest file for a project the moment it is created.
-2. Follow stringent versioning for assemblies.
-3. Write a publish script for each project that will build and publish the latest artifacts to NuGet repository. You may also consider hooking the publish script to your version control system.
-4. Write an update script for each project that will update all of its dependencies.
 
 # External Links
 
