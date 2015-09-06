@@ -28,7 +28,9 @@ This will be sufficient to make it work in very simple situations. NuGet is, how
 
 #### NuGet Package File
 
-NuGet bundles a project's build artifacts into a `.nupkg` archive for distribution. It includes project output (dll or exe depending on project output), auxiliary files (configurations, resources, etc.), other dependencies, etc. A new .nupkg file is created each time a new version of a project is published. Get a .nupkg file and open it with WinRAR and explore what's inside for better insight.
+NuGet bundles a project's build artifacts into a single `.nupkg` file for distribution. It includes project output, any auxiliary files (as configured by user), meta information, reference to other packages, etc. A single .nupkg file represents a distinct version of the package; that is, a new .nupkg file is created each time new version of a package is published.
+
+.nupkg file is essentially an archive. Get a .nupkg file and open it with WinRAR and explore what's inside for better insight.
 
 #### NuGet Package Schema
 
@@ -40,7 +42,7 @@ There are exceptions but usually NuGet organizes package contents in the followi
 
 For short, the contents inside `lib` are added to the target project's reference and contents of the `content` folder is copied to the target project's root path.
 
-#### NuGet Project Manifest File
+#### NuGet Project Manifest (.nuspec) File
 
 Each package published by NuGet is coupled with a manifest file (an XML configuration file.) In this file user specifies what to copy and how etc. Here is how a nuspec file looks like on its creation:
 
