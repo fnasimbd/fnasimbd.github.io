@@ -44,7 +44,7 @@ For short, the contents inside `lib` are added to the target project's reference
 
 #### NuGet Project Manifest (.nuspec) File
 
-Each package published by NuGet is coupled with a manifest file (an XML configuration file.) In this file user specifies what to copy and how etc. Here is how a nuspec file looks like on its creation:
+Each package published by NuGet is coupled with a manifest file (an XML configuration file.) This file specifies how the package is going to look like: it describes a package's identity, its file organization, what consumers will get or not, and many other things.  Here is how a sample nuspec file looks like on its creation:
 
 {% highlight xml linenos %}
 <?xml version="1.0"?>
@@ -67,9 +67,11 @@ Each package published by NuGet is coupled with a manifest file (an XML configur
 </package>
 {% endhighlight %}
 
-Only *id*, *version*, *title*, and *author* in metadata section are mandatory.
+As you see, initially it consists only of a 'metadata' section that describes the package; only *id*, *version*, *title*, *author*, and *description* in this section are mandatory. A very useful additional section is 'files': you can specify additional files to copy with the package in this section.
 
-For exahustive coverage see official [Nuspec reference](https://docs.nuget.org/Create/NuSpec-Reference).
+Nuspec files and NuGet overall have excellent integration with Visual Studio and MSBuild. You don't need to create nuspec file for Visual Studio projects manually; we will see later, `nuget spec` command will create one for you. Additionally, you can specify certain values as *replacement tokens* (by enclosing their names between '$' signs: as it is done for *id*, *version*, and some others in the sample above), then as you build the package NuGet picks up the values from project file. Once you have the nuspec file under a project directory with same name as the project, you are nearly ready to publish your project as a NuGet package!
+
+For exahustive coverage on nuspec file see official [Nuspec reference](https://docs.nuget.org/Create/NuSpec-Reference).
 
 #### NuGet Tools
 
