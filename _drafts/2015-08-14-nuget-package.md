@@ -83,7 +83,7 @@ For exahustive coverage on nuspec file see official [Nuspec reference](https://d
 
 #### NuGet Client
 
-Mainly a command line utility though other variants are avilable. It coordinates both package publication and consumption.
+Mainly a command line utility though other variants are available. It coordinates both package publication and consumption.
 
 NuGet client is available in three formats:
 
@@ -91,7 +91,7 @@ NuGet client is available in three formats:
 2. As collection of PowerShell commandlets.
 3. As a Visual Studio extension.
 
-The Visual Studio extension provides easy to use GUI and its intent is clear; coexistence of two CLI, however, with independent configurations(?) doing the same task confused me at first---and I believe it does so to many new users. The PowerShell commandlets are maybe part of Microsoft's plan to set NuGet or the co-project Chocolatey NuGet as the offcial Windows package manager---like Linux `apt`---in future.
+The Visual Studio extension provides easy to use GUI and its intent is clear; coexistence of two CLI, however, with independent configurations(?) doing the same task confused me at first---and I believe it does so to many new users. The PowerShell commandlets are maybe part of Microsoft's plan to set NuGet or the co-project Chocolatey NuGet as the offcial Windows package manager---like Linux `apt`---in future(?)
 
 The following commands are sufficent for basic NuGet operations. For the exhaustive list see [official command line reference](https://docs.nuget.org/consume/command-line-reference).
 
@@ -111,7 +111,7 @@ Feed manages the location where packages are stored by package publishers and pu
 
 #### Install NuGet Client
 
-NuGet client comes in two variants: as command line utility, called nuget.exe, and as Visual Studio extension. Installing both are straightforward and I recommend having both.
+Installing both the cmd utility and the Visual Studio extension are straightforward and I recommend having both.
 
 Download the NuGet command line utility from its [home page](https://nuget.org/nuget.exe) (it is only a single .exe file), copy it to your desired location, and add the path to environment variable.
 
