@@ -121,7 +121,7 @@ NuGet Package Manager extension comes pre-installed in Visual Studio 2012 or lat
 
 Setup a network path with write permission to package authors and read permission to package users (for this article I will use `\\farhan-lenovo\nuget-feed`); this will be your NuGet feed for now.
 
-# Authoring NuGet packages
+# Authoring NuGet Packages
 
 Create a new C# project named *Miscellaneous* and set the output type to class library. Add whatever classes and functionalities you want.
 
