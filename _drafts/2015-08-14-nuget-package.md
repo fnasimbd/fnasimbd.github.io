@@ -85,6 +85,14 @@ For exahustive coverage on nuspec file see official [Nuspec reference](https://d
 
 Mainly a command line utility though other variants are avilable. It coordinates both package publication and consumption.
 
+NuGet client is available in three formats:
+
+1. As a cmd utility.
+2. As collection of PowerShell commandlets.
+3. As a Visual Studio extension.
+
+The Visual Studio extension provides easy to use GUI and its intent is clear; coexistence of two CLI, however, with independent configurations(?) doing the same task confused me at first---and I believe it does so to many new users. The PowerShell commandlets are maybe part of Microsoft's plan to set NuGet or the co-project Chocolatey NuGet as the offcial Windows package manager---like Linux `apt`---in future.
+
 The following commands are sufficent for basic NuGet operations. For the exhaustive list see [official command line reference](https://docs.nuget.org/consume/command-line-reference).
 
 - [**Spec.**](https://docs.nuget.org/Consume/Command-Line-Reference#spec-command) Creates .nuspec file.
