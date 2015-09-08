@@ -95,7 +95,9 @@ The following commands are sufficent for basic NuGet operations. For the exhaust
 
 #### NuGet Feed
 
-Provider of NuGet packages; can be a network shared directory or an http server.
+Provider of NuGet packages. In other package managers it would rather be called a *repository* instead. A feed can be a local or network shared directory (*local feed* in NuGet jargon) or an http server (*remote feed* in NuGet jargon.)
+
+Feed manages the location where packages are stored by package publishers and pulled from by consumers.
 
 # Setting Up NuGet
 
