@@ -81,14 +81,9 @@ Nuspec files and NuGet overall have excellent integration with Visual Studio and
 
 For exahustive coverage on nuspec file see official [Nuspec reference](https://docs.nuget.org/Create/NuSpec-Reference).
 
-#### NuGet Tools
+#### NuGet Client
 
-A NuGet ecosystem consists of the following two key components:
-
-1. **NuGet client.** Mainly a command line utility though other variants are avilable. It coordinates both package publication and consumption.
-2. **NuGet feed.** Provider of NuGet packages; can be a network shared directory or an http server.
-
-#### NuGet Commands
+Mainly a command line utility though other variants are avilable. It coordinates both package publication and consumption.
 
 The following commands are sufficent for basic NuGet operations. For the exhaustive list see [official command line reference](https://docs.nuget.org/consume/command-line-reference).
 
@@ -97,6 +92,10 @@ The following commands are sufficent for basic NuGet operations. For the exhaust
 - [**Install.**](https://docs.nuget.org/Consume/Command-Line-Reference#install-command) Installs a package.
 - [**Update.**](https://docs.nuget.org/Consume/Command-Line-Reference#update-command) Updates an already installed package.
 - [**Restore.**](https://docs.nuget.org/Consume/Command-Line-Reference#restore-command) Downloads a missing package from repo.
+
+#### NuGet Feed
+
+Provider of NuGet packages; can be a network shared directory or an http server.
 
 # Setting Up NuGet
 
