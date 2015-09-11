@@ -83,23 +83,15 @@ For exahustive coverage on nuspec file see official [Nuspec reference](https://d
 
 #### NuGet Client
 
-Mainly a command line utility though other variants are available. Coordinating both package publication and consumption, NuGet client is at the heart of NuGet ecosystem. It is available in three formats:
+Coordinating both package publication and consumption, NuGet client is at the heart of NuGet package management environment. It is available in three formats:
 
-1. As a cmd utility.
-2. As collection of PowerShell commandlets.
-3. As a Visual Studio extension.
+1. As Command Prompt utility: called [*NuGet Command Line*](http://docs.nuget.org/Consume/Command-Line-Reference).
+2. As PowerShell console: called [*NuGet Package Manager Console*](http://docs.nuget.org/consume/package-manager-console).
+3. As Visual Studio GUI tool: called [*NuGet Package Manager Dialog*](http://docs.nuget.org/consume/Package-Manager-Dialog).
 
-The Visual Studio extension's intent is obvious: to provide an easy to use GUI within IDE; coexistence of two CLI, however, doing the same task confused me at first---and I believe it does so many new users. 
-The following commands are sufficent for basic NuGet operations. For the exhaustive list see [official command line reference](https://docs.nuget.org/consume/command-line-reference).
+Among them only NuGet Command Line can create and publish packages; though NuGet Command Line can handle package consumption as well, the rest two are more commonly used for that job.
 
-- [**Spec.**](https://docs.nuget.org/Consume/Command-Line-Reference#spec-command) Creates .nuspec file.
-- [**Pack.**](https://docs.nuget.org/Consume/Command-Line-Reference#pack-command) Creates a new package from project manifest file.
-- [**Install.**](https://docs.nuget.org/Consume/Command-Line-Reference#install-command) Installs a package.
-- [**Update.**](https://docs.nuget.org/Consume/Command-Line-Reference#update-command) Updates an already installed package.
-- [**Restore.**](https://docs.nuget.org/Consume/Command-Line-Reference#restore-command) Downloads a missing package from repo.
-
-An aside of the story: rather secretly, in Windows 10 Microsoft has [introduced](http://www.howtogeek.com/200334/windows-10-includes-a-linux-style-package-manager-named-oneget/) a Linux style package manager, called [*OneGet*](http://blogs.technet.com/b/windowsserver/archive/2014/04/03/windows-management-framework-v5-preview.aspx). It comes as PowerShell commandlet and interestingly many OneGet commands resemble NuGet ones!
-
+*Aside:* rather secretly, in Windows 10 Microsoft has [introduced](http://www.howtogeek.com/200334/windows-10-includes-a-linux-style-package-manager-named-oneget/) a Linux style package manager, called [*OneGet*](http://blogs.technet.com/b/windowsserver/archive/2014/04/03/windows-management-framework-v5-preview.aspx). It comes as PowerShell commandlet and interestingly many OneGet commands resemble NuGet ones!
 
 #### NuGet Feed
 
