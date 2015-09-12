@@ -67,7 +67,7 @@ Each package published by NuGet is coupled with a manifest file (an XML configur
 </package>
 {% endhighlight %}
 
-As you see, initially it consists only of a 'metadata' section that describes the package; only *id*, *version*, *title*, *author*, and *description* in this section are mandatory. A very useful additional section is 'files': you can specify additional files to copy with the package in this section. The file section follows the following basic form.
+As you see, initially it consists only of a 'metadata' section that describes the package; only *id*, *version*, *title*, *author*, and *description* in this section are mandatory. A very useful additional section is 'files': where you specify additional files to copy with the package. Files section follows the following basic form:
 
 {% highlight xml linenos %}
 <files>
