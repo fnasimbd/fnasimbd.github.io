@@ -34,11 +34,11 @@ As a format, .nupkg is essentially an archive. Get a .nupkg file and open it wit
 
 #### NuGet Package Directory Structure
 
-There are exceptions but usually NuGet organizes package contents in the following file schema:
+Inside the .nupkg archive, package contents are organized in directories. Depending on the configurations specified, a package's directory structure may be very complex. Usually, however, NuGet organizes package contents in the following directory structure:
 
-    package
-    |--lib/
-    |--content/
+    package-name.version
+    |--lib\
+    |--content\
 
 For short, the contents inside `lib` are added to the target project's reference and contents of the `content` folder is copied to the target project's root path.
 
@@ -48,7 +48,7 @@ Each package published by NuGet is coupled with a manifest file (an XML configur
 
 {% highlight xml linenos %}
 <?xml version="1.0"?>
-<package >
+<package>
   <metadata>
     <id>$id$</id>
     <version>$version$</version>
