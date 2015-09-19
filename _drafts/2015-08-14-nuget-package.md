@@ -32,7 +32,7 @@ NuGet bundles a project's build artifacts into a single `.nupkg` file for distri
 
 As a format, .nupkg is essentially an archive. Get a .nupkg file and open it with WinRAR and explore what's inside for better insight.
 
-#### NuGet Package Schema
+#### NuGet Package Directory Structure
 
 There are exceptions but usually NuGet organizes package contents in the following file schema:
 
