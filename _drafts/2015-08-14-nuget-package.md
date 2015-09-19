@@ -99,7 +99,7 @@ Among them only NuGet Command Line can create and publish packages; though NuGet
 
 Provider of NuGet packages. In other package managers it would rather be called a *repository* instead. A feed can be a local or network shared directory (*local feed* in NuGet jargon) or a web server (*remote feed* in NuGet jargon.) Feed manages the location where packages are stored by package publishers and pulled from by consumers.
 
-NuGet client can handle multiple feeds. Unless configured otherwise, client picks up package sources from %APPDATA%\NuGet\NuGet.Config file.
+NuGet client can handle multiple feeds. Unless configured otherwise, client picks up package sources from *%APPDATA%\NuGet\NuGet.Config* file.
 
 # Setting Up NuGet
 
@@ -143,7 +143,7 @@ Open Command Prompt or Powershell and switch to your project directory.
 
 Publishing first release of the project done! Assuming you don't change meta information of the package, to publish every next version, performing steps 3 to 6 will do.
 
-# Using NuGet Packages
+# Consuming NuGet Packages
 
 You can consume NuGet packages through both the command line utility and the Visual Studio extension. The Visual Studio extension is, however, easy to use and manages packages more conveniently.
 
