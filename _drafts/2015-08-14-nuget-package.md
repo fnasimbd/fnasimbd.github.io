@@ -30,7 +30,7 @@ This will be sufficient to make it work in very simple situations. NuGet is, how
 
 NuGet bundles a project's build artifacts into a single `.nupkg` file for distribution. It includes project output, any auxiliary files (as configured by user), meta information, reference to other packages, etc. A single .nupkg file represents a distinct version of the package; that is, each time you publish a new version of your package, you create a new .nupkg file.
 
-As a format, .nupkg is essentially an archive. Get a .nupkg file and open it with WinRAR and explore what's inside for better insight.
+As a file format, .nupkg is essentially an archive. Get a .nupkg file and open it with WinRAR and explore what's inside for better insight.
 
 #### NuGet Package Directory Structure
 
