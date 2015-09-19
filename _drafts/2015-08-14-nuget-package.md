@@ -103,11 +103,11 @@ NuGet client can handle multiple feeds. Unless configured otherwise, client pick
 
 #### Install NuGet Client
 
-Installing both the cmd utility and the Visual Studio extension are straightforward and I recommend having both.
+Installing both the command prompt utility and the Visual Studio extension, which also includes the PowerShell Package Manager Console, are straightforward and I recommend having both.
 
-Download the NuGet command line utility from its [home page](https://nuget.org/nuget.exe) (it is only a single .exe file), copy it to your desired location, and add the path to environment variable.
+Download the NuGet command line utility from its [home page](https://nuget.org/nuget.exe) (it is only a single .exe file), copy it to your desired location, and add the path to your system's path environment variable.
 
-NuGet Package Manager extension comes pre-installed in Visual Studio 2012 or later. In earlier versions, install it through *Tools > Extensions Manager*.
+NuGet Package Manager extension comes pre-installed in Visual Studio 2012 or later. In earlier versions, install it through *Tools > Extensions Manager*. Once installed, you can access both the Package Manager Dialog and the Package Manager Console from *Tools > NuGet Package Manager* menu in Visual Studio.
 
 #### Setup NuGet Feed
 
