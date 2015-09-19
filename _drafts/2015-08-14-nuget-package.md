@@ -67,7 +67,9 @@ Each package published by NuGet is coupled with a manifest file (an XML configur
 </package>
 {% endhighlight %}
 
-As you see, initially it consists only of a 'metadata' section that describes the package; only *id*, *version*, *title*, *author*, and *description* in this section are mandatory. A very useful additional section is 'files': where you specify additional files to copy with the package. Files section follows the following basic form:
+As you see, initially it consists only of a 'metadata' section that describes the package; only *id*, *version*, *title*, *author*, and *description* in this section are mandatory.
+
+A very useful additional section is 'files': where you specify additional files to copy with the package. Files section follows the following basic form:
 
 {% highlight xml linenos %}
 <files>
@@ -75,7 +77,7 @@ As you see, initially it consists only of a 'metadata' section that describes th
 </files>
 {% endhighlight %}
 
-To include additional files to the package, add a file section in your nuspec file and add as many files as you need.
+To include additional files to your package, add a file section in the nuspec file and add as many files as you need.
 
 Nuspec files and NuGet overall have excellent integration with Visual Studio and MSBuild. You don't need to create nuspec file for Visual Studio projects manually; we will see later, `nuget spec` command will create one for you. Additionally, you can specify certain values as *replacement tokens* (by enclosing their names between '$' signs: as it is done for *id*, *version*, and some others in the sample above), then as you build the package NuGet picks up the values from project file. Once you have the nuspec file under a project directory with same name as the project, you are nearly ready to publish your project as a NuGet package!
 
