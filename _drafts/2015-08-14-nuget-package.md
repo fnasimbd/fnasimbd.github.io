@@ -153,8 +153,8 @@ First step to using NuGet packages is to configure your package sources. By defa
 
 1. Open NuGet Package Manager configuration dialog box in Visual Studio (Goto *Tools* > *NuGet Package Manager* > *Package Manager Settings* > *Package Sources*.)
 2. Click the **+** sign near the top-right corner.
-3. Put a name for your source in the *Name* field.
-4. Put the shared folder path in *Source* field, click OK.
+3. Put a name for your source in the *Name* field (*Test Package Source* in my case.)
+4. Put the shared folder path (`\\farhan-lenovo\nuget-feed` in my case) in *Source* field, click OK.
 
 You are done!
 
