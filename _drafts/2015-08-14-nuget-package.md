@@ -97,7 +97,7 @@ Among them only NuGet Command Line can create and publish packages; though NuGet
 
 #### NuGet Feed
 
-Provider of NuGet packages. In other package managers it would rather be called a *repository* instead. A feed can be a local or network shared directory (*local feed* in NuGet jargon) or a web server (*remote feed* in NuGet jargon.) Feed manages the location where packages are stored by package publishers and pulled from by consumers.
+Provider of NuGet packages. A feed can be a local or network shared directory (*local feed* in NuGet jargon) or a web server (*remote feed* in NuGet jargon.) Feed manages the location where packages are stored by package publishers and pulled from by consumers.
 
 NuGet client can handle multiple feeds. Unless configured otherwise, client picks up package sources from *%APPDATA%\NuGet\NuGet.Config* file.
 
