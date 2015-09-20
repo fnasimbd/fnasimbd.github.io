@@ -162,7 +162,7 @@ You are done!
 
 #### Installation
 
-Now let's install the package we published earlier, called Miscellaneous, in some other project. Open the target project in Visual Studio, go to *Tools > NuGet Package Manager > Manage NuGet Packages for Solution...* The package browser window will appear; in the Online tab find and select the source we configured earlier. All packages available in the current feed is listed here. The package Miscellaneous should be visible here. Click the install button beside it.
+Now let's install the package we published earlier, called Miscellaneous, in some other project. Open the target project in Visual Studio, go to *Tools > NuGet Package Manager > Manage NuGet Packages for Solution...* The package browser window will appear; in the Online tab find and select Test Package Source. All packages available in the current feed, including Miscellaneous, is listed here. Select and click the install button beside Miscellaneous.
 
 ![install-package]({{site.url}}/images/install-package.png)
 
