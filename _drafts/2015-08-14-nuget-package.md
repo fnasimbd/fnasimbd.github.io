@@ -182,6 +182,12 @@ Open package browser window, select 'Installed Packages' tab. The package 'Misce
 
 ![uninstall-package]({{site.url}}/images/uninstall-package.png)
 
+#### Restoring
+
+NuGet can fetch missing packages from feed automatically: this operation is called *restoring packages*. Visual Studio package management dialog doesn't support package restoring. However, by default Visual Studio does a package restore on each build. You can enable or disable package restore by editing the *NuGet.config* file within your *%AppData%\NuGet\\* folder.
+
+You can also restore packages of a solution manually with the NuGet command utility: open Command Prompt or PowerShell, switch to your solution directory, run `nuget restore`, all missing packages should be restored.
+
 # External Links
 
 1. [NuGet Home](https://github.com/nuget/home)
