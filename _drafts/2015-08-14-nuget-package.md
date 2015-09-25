@@ -160,7 +160,7 @@ You are done!
 
 ![config-src]({{site.url}}/images/config-src.png)
 
-#### Installation
+#### Installing Packages
 
 Now let's install the package we published earlier, called Miscellaneous, in some other project. Open the target project in Visual Studio, go to *Tools > NuGet Package Manager > Manage NuGet Packages for Solution...* The package browser window will appear; in the Online tab find and select Test Package Source. All packages available in the current feed, including Miscellaneous, is listed here. Select and click the install button beside Miscellaneous.
 
@@ -168,7 +168,7 @@ Now let's install the package we published earlier, called Miscellaneous, in som
 
 If your package installation is successful, you will see these changes in your project: a library called Miscellaneous.dll is added to the project references, a new folder called *packages* is created under your solution directory, and a file called *packages.config* is included in your project. The 'packages' folder contains the package you just installed and all further packages you install in any other project under the same solution; the 'packages.config' file contains information of the packages the project depends on in XML format.
 
-#### Updating
+#### Updating Packages
 
 Suppose you have made some changes to the package Miscellaneous and want to publish a new version. Make the changes you wish and follow steps 3 to 6 in section *Authoring NuGet Packages* to have the new version published.
 
@@ -176,13 +176,13 @@ To get the update, open package browser window just the way we did it during ins
 
 ![update-package]({{site.url}}/images/update-package.png)
 
-#### Uninstalling
+#### Uninstalling Packages
 
 Open package browser window, select 'Installed Packages' tab. The package 'Miscellaneous' should appear here with an 'Uninstall' button beside it. Click that Uninstall button. Package is uninstalled; the reference to 'Miscellaneous.dll' as well as the folder 'Miscellaneous' in packages folder under solution directory disappears if uninstallation is successful.
 
 ![uninstall-package]({{site.url}}/images/uninstall-package.png)
 
-#### Restoring
+#### Restoring Packages
 
 NuGet can fetch missing packages from feed automatically: this operation is called *restoring packages*. Visual Studio package management dialog doesn't support package restoring. By default, however, Visual Studio does a package restore on each build. You can enable or disable package restore by editing the *NuGet.config* file within your *%AppData%\NuGet\\* folder.
 
