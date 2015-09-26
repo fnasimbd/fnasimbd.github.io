@@ -184,9 +184,9 @@ Open package browser window, select 'Installed Packages' tab. The package 'Misce
 
 #### Restoring Packages
 
-NuGet can fetch missing packages from feed automatically: this operation is called *restoring packages*. Visual Studio package management dialog doesn't support package restoring. By default, however, Visual Studio does a package restore on each build. You can enable or disable package restore by editing the *NuGet.config* file within your *%AppData%\NuGet\\* folder.
+NuGet can fetch missing packages from feed automatically---a feature called *restoring packages*. Package Manager Dialog doesn't support package restoring; however, by default Visual Studio restores packages on each build. Do the following to test the package restore feature: have the package Miscellaneous installed in some project, delete or rename the packages folder under your solution directory, build your solution from Visual Studio. If build is successful the packages folder under solution directory must be available again with its contents.
 
-You can also restore packages of a solution manually with the NuGet command utility: open Command Prompt or PowerShell, switch to your solution directory, run `nuget restore`, all missing packages should be restored.
+You can enable or disable package restore feature by editing the *NuGet.config* file within your *%AppData%\NuGet\\* folder.
 
 # External Links
 
