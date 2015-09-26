@@ -101,6 +101,10 @@ Provider of NuGet packages. A feed can be a local or network shared directory (*
 
 NuGet client can handle multiple feeds. Unless configured otherwise, client picks up package sources from *%APPDATA%\NuGet\NuGet.Config* file.
 
+#### Other Tools
+
+Outside the above-mentioned, there are various other tools developed by external projects that enhance NuGet functionalities. For an overview of those tools and projects and their relationship with NuGet, see the official [NuGet Ecosystem](https://docs.nuget.org/contribute/ecosystem) documentation.
+
 # Setting Up NuGet
 
 #### Install NuGet Client
