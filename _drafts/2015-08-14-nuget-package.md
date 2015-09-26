@@ -145,7 +145,7 @@ Publishing first release of the project done! Assuming you don't change meta inf
 
 # Consuming NuGet Packages
 
-You can consume NuGet packages through both the command line utility and the Visual Studio extension. The Visual Studio extension is, however, easy to use and manages packages more conveniently.
+You can consume NuGet packages through all three variants of NuGet client that I described earlier. Among them, however, I find the Package Manager Dialog more suitable for an introduction; in the following sections, I am going to show basic NuGet package management operations with this. Once you get used with the Package Manager Dialog, you can pick up the other two clients, Command Prompt and Package Manager Console, by studying their references yourself.
 
 #### Configuring Package Source
 
