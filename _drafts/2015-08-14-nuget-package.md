@@ -166,11 +166,11 @@ You are done!
 
 #### Installing Packages
 
-Now let's install the package we published earlier, called Miscellaneous, in some other project. Open the target project in Visual Studio, go to *Tools > NuGet Package Manager > Manage NuGet Packages for Solution...* The package browser window will appear; in the Online tab find and select Test Package Source. All packages available in the current feed, including Miscellaneous, is listed here. Select and click the install button beside Miscellaneous.
+Now let's install the package Miscellaneous, that we published earlier, in some other project. Open the target project in Visual Studio, go to *Tools > NuGet Package Manager > Manage NuGet Packages for Solution...* The package browser window will appear; in the Online tab find and select Test Package Source. All packages available in the current feed, including Miscellaneous, is listed here. Select and click the install button beside Miscellaneous.
 
 ![install-package]({{site.url}}/images/install-package.png)
 
-If your package installation is successful, you will see these changes in your project: a library called Miscellaneous.dll is added to the project references, a new folder called *packages* is created under your solution directory, and a file called *packages.config* is included in your project. The 'packages' folder contains the package you just installed and all further packages you install in any other project under the same solution; the 'packages.config' file contains information of the packages the project depends on in XML format.
+If your package installation is successful, you will see these changes in your project: a library called Miscellaneous.dll is added to the project references, a new folder called *packages* is created under your solution directory, and a file called *packages.config* is included in your project. The 'packages' folder contains the package you just installed and all further packages you install in any other project under the same solution; the 'packages.config' file contains information of the packages the project is dependent on in XML format.
 
 #### Updating Packages
 
