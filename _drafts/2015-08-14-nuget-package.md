@@ -153,12 +153,12 @@ You can consume NuGet packages through all three variants of NuGet client that I
 
 #### Configuring Package Source
 
-First step to using NuGet packages is to configure your package sources. By default only one, nuget.org, feed is available in the Visual Studio extension. To add your own feed, do the following steps.
+First step to using NuGet packages is to configure your package sources. By default only one, nuget.org, feed is available as package source. To add your own feed, do the following steps:
 
-1. Open NuGet Package Manager configuration dialog box in Visual Studio (Goto *Tools* > *NuGet Package Manager* > *Package Manager Settings* > *Package Sources*.)
+1. Open NuGet Package Manager configuration dialog box in Visual Studio (Go to *Tools* > *NuGet Package Manager* > *Package Manager Settings* > *Package Sources*.)
 2. Click the **+** sign near the top-right corner.
 3. Put a name for your source in the *Name* field (*Test Package Source* in my case.)
-4. Put the shared folder path (`\\farhan-lenovo\nuget-feed` in my case) in *Source* field, click OK.
+4. Put the shared folder path to be used as package feed (`\\farhan-lenovo\nuget-feed` in my case) in *Source* field and click OK.
 
 You are done!
 
