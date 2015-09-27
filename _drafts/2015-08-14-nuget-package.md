@@ -18,7 +18,7 @@ To be short, in an automated package management ecosystem, package authors push 
 
 Most open software platforms took package management seriously. Their dependencey management tools have been around for about a decade: like Java world has *Maven* since 2002.
 
-.NET world, however, joined the race much later. Their solution to the dependency problem is *NuGet*: a package/library manager for .NET languages, originally developed by *Outercurve Foundation* and now owned by *.NET Foundation*. Since its introduction in 2010 it went popular rapidly: at present [Nuget.org](http://www.nuget.org), the official .NET Foundation public NuGet package feed, hosts over 40,000 packages. These days NuGet is ubiquitous and it is the de facto standard in .NET world.
+.NET world, however, joined the race much later. Their solution to the dependency problem is *NuGet*: a package manager for .NET languages, originally developed by *Outercurve Foundation* and now owned by *.NET Foundation*. Since its introduction in 2010 it went popular rapidly: at present [Nuget.org](http://www.nuget.org), the official .NET Foundation public NuGet package feed, hosts over 40,000 packages. These days NuGet is ubiquitous and it is the de facto standard in .NET world.
 
 # How NuGet Works
 
