@@ -3,6 +3,7 @@ layout: post
 title: "NuGet Primer"
 categories: articles
 date: 2015-09-27-T23:23:00-05
+share: true
 comments: true
 ---
 
