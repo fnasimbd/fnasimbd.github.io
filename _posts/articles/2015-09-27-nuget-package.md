@@ -213,3 +213,5 @@ NuGet can fetch missing packages from feed automatically---a feature called *res
 
 {% endif %}
 
+{% include google-analytics.html %}
+
