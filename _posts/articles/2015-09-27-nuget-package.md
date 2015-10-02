@@ -1,11 +1,17 @@
 ---
 layout: post
 title: "NuGet Primer"
+description: "An introduction to NuGet package manager article"
+excerpt: "An introduction to NuGet package manager article."
 categories: articles
 date: 2015-09-27-T23:23:00-05
 share: true
 comments: true
 ---
+
+{% if page.description %}
+  <meta name="description" content="{{ page.description}}" />
+{% endif %}
 
 # Package Management: Very Briefly
 
