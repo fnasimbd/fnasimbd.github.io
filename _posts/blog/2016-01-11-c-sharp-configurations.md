@@ -8,7 +8,7 @@ tags: [".net", "C#", "configuration", "appconfig"]
 image:
 feature:
 share: true
-date: 2016-01-07T00:45:00-04:00
+date: 2016-01-11T02:05:00-04:00
 comments: true
 ---
 
