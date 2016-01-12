@@ -87,7 +87,7 @@ It should be obvious from the App.config file examples that appSettings section 
 
 # The *Settings.settings* Section
 
-The other way of handling configurations is by `Settings` class: extension of `System.Configuration.ApplicationSettingsBase`. Here you add one or more `Settings` class to your project, add configurations as strongly typed static properties of that class, and provide default values for configurations in project App.config file. This approach resolves the strong typing limitation of appSettings and it is the recommended way these days.
+The other way of handling configurations is by `Settings` class: extension of `System.Configuration.ApplicationSettingsBase`. Here you add one or more `Settings` class to your project, add configurations as strongly typed static properties of that class, and provide default values for configurations in project App.config file. This approach addresses the strong typing limitation of appSettings and it is the recommended way these days.
 
 Visual Studio has settings class designer that does most of the settings operations. By default you don't have any settings class in your project; to add one, open project properties, go to Settings tab; the settings designer opens, add as many settings you want, select type for them, provide default values, and save. As result of your changes, a new element called Settings.settings is added in your project's Properties node and your App.config file changes to something like this:
 
@@ -150,7 +150,7 @@ MSDN covers configuration and settings in great detail---so detailed that hard f
 1. [ConfigurationManager.AppSettings Property](https://msdn.microsoft.com/en-us/library/system.configuration.configurationmanager.appsettings(v=vs.110).aspx).
 1. [Application Settings](https://msdn.microsoft.com/en-us/library/a65txexh(v=vs.100).aspx).
 1. [Settings Page, Project Designer](https://msdn.microsoft.com/en-us/library/cftf714c(v=vs.100).aspx).
-1. [Application Settings Architecture](https://msdn.microsoft.com/en-us/library/8eyb2ct1(v=vs.100).aspx)
+1. [Application Settings Architecture](https://msdn.microsoft.com/en-us/library/8eyb2ct1(v=vs.100).aspx).
 
 {% if page.comments %}
 
