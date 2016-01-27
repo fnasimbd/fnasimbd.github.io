@@ -117,12 +117,12 @@ var name = Properties.Settings.Default.Name;
 
 Additionally you may also want to have a look at the `Settings.Designer.cs` file to get a feel how this works.
 
-#### The *applicationSettings* and *userSettings* Section
+#### The *Application* and *User* Scopes
 
-In settings designer you should have noticed that the settings keys has two choices for scope: *User* and *Application*. They differ in the type of property they result in Settings class.
+In settings designer you should have noticed that the settings keys has two choices for scope: *Application* and *User*. They differ in the type of property they result in Settings class.
 
-- The *Application* scoped settings are get only properties; stores system level information that are not likely to change at run time.
-- The *User* scoped settings are get and set properties; intended to store user preferences that are likely to change at run time.
+- The *Application* scoped settings are get only properties; stores system level information that are not likely to change at run time. Default values for application scoped configurations reside in *applicationSettings* section in App.config file.
+- The *User* scoped settings are get and set properties; intended to store user preferences that are likely to change at run time. User scoped configuratios have their default values in *userSettings* section in App.config file.
 
 #### Updating and Saving User Scoped Application Settings in Run Time
 
@@ -151,6 +151,10 @@ MSDN covers configuration and settings in great detail---so detailed that hard f
 1. [Application Settings](https://msdn.microsoft.com/en-us/library/a65txexh(v=vs.100).aspx).
 1. [Settings Page, Project Designer](https://msdn.microsoft.com/en-us/library/cftf714c(v=vs.100).aspx).
 1. [Application Settings Architecture](https://msdn.microsoft.com/en-us/library/8eyb2ct1(v=vs.100).aspx).
+
+# Updates
+
+__January 28, 2016:__ Renamed section "*The* applicationSettings *and* userSettings *Sections*" to "*The* Application *and* User *Scopes*" and updated content within the section.
 
 {% if page.comments %}
 
