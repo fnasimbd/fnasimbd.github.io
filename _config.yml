@@ -12,7 +12,7 @@ url:
 
 permalink:   /:categories/:title/
 markdown:    redcarpet
-highlighter: rouge
+#highlighter: rouge
 sass:
   sass_dir: _sass
   style: compressed
