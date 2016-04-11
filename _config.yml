@@ -11,8 +11,8 @@ url:
 # Jekyll configuration
 
 permalink:   /:categories/:title/
-markdown:    redcarpet
-#highlighter: rouge
+markdown:    kramdown
+highlighter: rouge
 sass:
   sass_dir: _sass
   style: compressed
