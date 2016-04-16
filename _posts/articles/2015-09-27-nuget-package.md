@@ -53,7 +53,7 @@ For short, the contents inside `lib` are added to the target project's reference
 
 Each package published by NuGet is coupled with a manifest file (an XML configuration file.) This file specifies how the package is going to look like: it describes a package's identity, its file organization, what consumers will get or not, and many other things.  Here is how a sample nuspec file looks like on its creation:
 
-{% highlight xml linenos %}
+```
 <?xml version="1.0"?>
 <package>
   <metadata>
@@ -72,17 +72,17 @@ Each package published by NuGet is coupled with a manifest file (an XML configur
     <tags>Tag1 Tag2</tags>
   </metadata>
 </package>
-{% endhighlight %}
+```
 
 As you see, initially it consists only of a 'metadata' section that describes the package; only *id*, *version*, *title*, *author*, and *description* in this section are mandatory.
 
 A very useful additional section is 'files': where you specify additional files to copy with the package. Files section follows the following basic form:
 
-{% highlight xml linenos %}
+```
 <files>
   <file src="source file path" target="target file path" />
 </files>
-{% endhighlight %}
+```
 
 To include additional files to your package, add a file section in the nuspec file and add as many files as you need.
 
