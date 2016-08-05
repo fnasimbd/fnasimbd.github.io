@@ -16,7 +16,7 @@ comments: true
     <meta name="description" content="{{page.description}}" />
 {% endif %}
 
-Configurations are integral to applications that has to deal with user preferences or configurable components. C# .NET offers two standard means of handling configurations that relieves developers from much of the hassle of implementing configuration handling themselves. Though the configuration handling features are extendable, they are adequate for the basic needs.
+Configurations are integral to applications that has to deal with user preferences or configurable components. C# .NET offers two standard means of handling configurations that relieves developers from much of the hassle of implementing configuration handling themselves. Though the configuration handling features are extendable, the defaults are adequate for the basic needs.
 
 # The *ConfigurationManager.AppSettings* Property
 
@@ -89,7 +89,7 @@ It should be obvious from the App.config file examples that appSettings section 
 
 The other way of handling configurations is by `Settings` class: extension of `System.Configuration.ApplicationSettingsBase`. Here you add one or more `Settings` class to your project, add configurations as strongly typed static properties of that class, and provide default values for configurations in project App.config file. This approach addresses the strong typing limitation of appSettings and it is the recommended way these days.
 
-Visual Studio has settings class designer that does most of the settings operations. By default you don't have any settings class in your project; to add one, open project properties, go to Settings tab; the settings designer opens, add as many settings you want, select type for them, provide default values, and save. As result of your changes, a new element called Settings.settings is added in your project's Properties node and your App.config file changes to something like this:
+Visual Studio has a settings class designer that does most of the settings operations. By default you don't have any settings class in your project; to add one, open project properties, go to Settings tab; the settings designer opens, add as many settings you want, select type for them, provide default values, and save. As result of your changes, a new element called Settings.settings is added in your project's Properties node and your App.config file changes to something like this:
 
 ```
 <?xml version="1.0" encoding="utf-8" ?>
