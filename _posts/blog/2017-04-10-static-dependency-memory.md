@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Singleton Dependency and Memory Usage"
+title: "Static Dependency and Memory Usage"
 modified:
 categories: blog
 excerpt:
@@ -8,7 +8,7 @@ tags: [".net", "C#", "dependency injection", "Unity", "memory" ]
 image:
 feature:
 share: true
-date: 2017-04-10T03:10:00-15:00
+date: 2017-04-10T10:10:00-11:00
 comments: true
 ---
 
