@@ -34,7 +34,7 @@ Both backup and restore are invoked from an `EmbeddableDocumentStore` instance a
 
 Initiating a backup of an embedded database is exceptionally simple. Initialize an `EmbeddableDocumentStore` at the database location, call the `StartBackup()` command method with appropritate parameters, the backup location is created if it doesn't exist, and backup starts asynchronously. The `EmbeddableDocumentStore` instance for backup doesn't need to be dedicated for it; you can use the one that is being used by other operations.
 
-```
+```csharp
 public void Backup(string backupPath)
 {
     try
@@ -78,7 +78,7 @@ As mentioned in the overview section, restoration can be done with both the clie
 
 Like backup, initiating a restore operation from client API is straightforward. Create and initialize a temporary `EmbeddableDocumentStore` for restore, call `StartRestore` on it, the restore location is created if it doesn't exist, and restore continues asynchronously.
 
-```
+```csharp
 public void Restore(string backupPath, string databaseLocation, string databaseName)
 {
     using (var documentStore = new EmbeddableDocumentStore())
