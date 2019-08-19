@@ -1,0 +1,9 @@
+{
+    "name": "Jekyll Test",
+    "image": "etelej/jekyll:latest",
+    "appPort": 4000,
+    "extensions": [
+    ],
+    "runArgs": ["-v", "e:/projects/fnasimbd.github.io/:/app", "-w", "/app"],
+    "postCreateCommand": ["bundle exec", "jekyll serve --host=0.0.0.0"]
+}
