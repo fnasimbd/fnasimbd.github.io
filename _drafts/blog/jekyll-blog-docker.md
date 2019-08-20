@@ -1,16 +1,18 @@
 ---
 layout: post
-title: "Jekyll Blogs with Docker Test"
+title: "Jekyll Blogs with Docker"
 modified:
 categories: blog
 excerpt:
-tags: ["ide", "random-notes"]
+tags: ["jekyll", "ide", "docker", "random-notes"]
 comments: true
 ---
 
-This blog is hosted with _GitHub Pages_ (built on top of [_Jekyll_](http://jekyllrb.com) server and Jekyll is written in Ruby.) Jekyll is a nice tool for its job, however, for years, I had been struggling with a few problems: Ruby environment is so brittle, things break so easily (e.g. a Gem update, different OS version, etc.) I could publish posts only from my carefully curated VMWare Ubuntu image (I am a Windows user.) That setup is not portable at all; I want to contirubute (or save drafts) from anywhere. Things came to a halt, when I started using _Docker_: Docker and VMWare can't run simultaneously in Windows (as the former uses _Hyper-V_ virtualization, which VMWare is not compatible with!) I reached the ideal setup much later, exploiting Docker itself.
+This blog is hosted with _GitHub Pages_ (built on top of [_Jekyll_](http://jekyllrb.com) server and Jekyll is written in Ruby.) Jekyll is a nice tool for its job, however, the Ruby environment is so brittle: things break easily (e.g. a Gem update, different OS version, etc.) An isolated development environment is an absolute necessity. For some time, I curated a VMWare Ubuntu image (I am primarily a Windows user) for Jekyll, and I could publish posts only from that. That setup was not portable at all; I wanted to publish posts or preview drafts from anywhere. Even worse, things came to a halt when I started using _Docker_ in my Windows machine: Docker and VMWare can't run together in Windows (as the former uses _Hyper-V_ virtualization, which VMWare is not compatible with!) I reached the ideal setup later, exploiting Docker itself.
 
-Firstly, I had to find the right Docker image for Jekyll that has Jekyll, with necessary dependencies, installed. So far I am using the [`etelej/jekyll`](https://hub.docker.com/r/etelej/jekyll/) image as the official Jekyll image ([`jekyll/jekyll`](https://hub.docker.com/r/jekyll/jekyll)) has problem exposing the loopback address. Building a container from that image gives an isolated development environment. ~~I usually ignore the Docker image's [entrypoint](https://docs.docker.com/glossary/?term=ENTRYPOINT) (a command that starts once the container is initialized, and the container terminates when the command finishes); I want the container keep running and publishing the latest changes while I am editing my post drafts. Starting an infinit loop on container startup does the trick.~~
+Firstly, I had to find the right [Docker image](https://docs.docker.com/glossary/?term=IMAGE) for Jekyll that has Jekyll installed, with necessary dependencies. So far, I am using the [`etelej/jekyll`](https://hub.docker.com/r/etelej/jekyll/) image (I also tried the [official Jekyll image](https://hub.docker.com/r/jekyll/jekyll), however, it has a problem exposing the loopback address: all hyperlinks in the generated pages point to the container address, instead of loopback.) It follows these conventions: [map]() your GitHub Pages repository to the containers `/app` directory, set `/app` as current workspace, expose port `4000`, and you can access your page on hosts mapped port after container starts. A [container](), built from that image, gives an isolated development environment, resolving dependency problems.
+
+Next comes, building the right [Docker container](https://docs.docker.com/glossary/?term=CONTAINER) from the image. I override the `etelej/jekyll` image's [entrypoint](https://docs.docker.com/glossary/?term=ENTRYPOINT) (a command that starts once the container is initialized, and the container terminates when the command finishes); it starts Jekyll without `--drafts` switch; I want the container keep running and Jekyll regenerating the latest changes while I am editing my post drafts. Starting an infinite loop on container startup does the trick.
 
 ```
 docker run -v "{path to blog repo}:/app" -w /app -p 4000:4000 etelej/jekyll jekyll serve --host=0.0.0.0 --drafts
