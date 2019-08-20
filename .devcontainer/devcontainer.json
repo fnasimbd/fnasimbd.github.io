@@ -2,6 +2,7 @@
     "name": "Jekyll Test",
     "image": "etelej/jekyll:latest",
     "appPort": 4000,
+    "runArgs": ["-e", "TZ=Asia/Dhaka"],
     "extensions": [
     ]
 }
