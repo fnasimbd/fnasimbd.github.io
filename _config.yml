@@ -114,7 +114,7 @@ author:
       icon: fab fa-github-square
     - title: LinkedIn
       url: http://www.linkedin.com/in/farhannasim/ 
-      icon: fab fa-linkedin-square
+      icon: fab fa-linkedin
 
 # Footer Links
 footer_links:
@@ -126,7 +126,7 @@ footer_links:
     icon: fab fa-github-square
   - title: LinkedIn
     url: http://www.linkedin.com/in/farhannasim/ 
-    icon: fab fa-linkedin-square
+    icon: fab fa-linkedin
   - title: Feed
     url: atom.xml
     icon: fas fa-rss-square
