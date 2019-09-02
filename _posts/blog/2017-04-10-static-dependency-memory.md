@@ -90,13 +90,13 @@ Unity's default type resolution strategy is transient [1] (a new instance is cre
 
 Let's analyze the result of the first case.
 
-![edit-project-file]({{site.url}}/images/mem-1.png)
+![edit-project-file]({{ '/images/mem-1.png' | relative_url }})
 
 As the Visual Studio Diagnostic Tools' memory chart shows, memory usage peaks to 141 MB however, it remains much lower on average. As the resolved `Client` instances has no references outside the iteration loop, they become eligible for collection as they go out of scope and the memory acquired by them are freed up by garbage collector periodically.
 
 In the second case, the dependency instance is referenced outside the `Client`; we do it by uncommenting the second commented block in the applicatoin's `Main` method; it appends the `HeavyWeightDependency` instance from each `Client` instance into a static list `_dependencies`; as a `static` field, the list is alive until the application is closed. Let's see how does it affect memory usage.
 
-![edit-project-file]({{site.url}}/images/mem-3.png)
+![edit-project-file]({{ '/images/mem-3.png' | relative_url }})
 
 This time things are worse (worst, in fact, among the four cases.) As the dependency is being referenced outside the client (in the static list `_dependencies`,) garbage collector can't release the memory acquired by it even though the corresponding client instance goes out of scope. Progressing this way, the application will eventually run out of memory.
 
@@ -106,13 +106,13 @@ As we planned, now we repeat the above two cases but with `HeavyWeightDependency
 
 In the third case, we have the dependency as a singleton and it has no references outside the client.
 
-![edit-project-file]({{site.url}}/images/mem-2.png)
+![edit-project-file]({{ '/images/mem-2.png' | relative_url }})
 
 This time memory jumps to 24 MB on startup and becomes stable; about half of it (~11 MB) is due to the `HeavyWeightDependency` instance and the rest is due to the application's overhead. Creating multiple instance of `Client` doesn't have any impact on memory.
 
 In the fourth---and the last---case, the dependency remains singleton but we reference it outside the client. Just as before, we do it by adding the dependency to the static list `_dependencies`.
 
-![edit-project-file]({{site.url}}/images/mem-4.png)
+![edit-project-file]({{ '/images/mem-4.png' | relative_url }})
 
 This case is absolutely similar to the previous one! Having the dependency, a singleton, referenced anywhere in the application doesn't have any impact on memory usage at all.
 

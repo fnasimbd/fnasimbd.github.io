@@ -18,7 +18,7 @@ To put in short, *build targets* are group of operations that MSBuild performs a
 
 In order to add a custom target, your project file, that is your project's .csproj file, needs to be modified; it can't be done in Visual Studio while corresponding project is open in it: either from solution explorer first unload the project and choose *Edit ProjectName.csproj* from context menu (as the following figure shows) or do it outside with an editor while project is not open in Visual Studio.
 
-![edit-project-file]({{site.url}}/images/edit-project-file.png)
+![edit-project-file]({{ '/images/edit-project-file.png' | relative_url }})
 
 MSBuild project files are XML configuration files. To add a custom target, just add an XML element called *Target* with a *Name* attribute and add operations to be performed within it. Just adding a custom target doesn't have it executed during build; though there are other ways to do it, for simplicity we will add it to the Project element's *DefaultTargets* list to have it executed. 
 
