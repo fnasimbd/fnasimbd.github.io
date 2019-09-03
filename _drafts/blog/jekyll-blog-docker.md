@@ -9,7 +9,11 @@ comments: true
 share: true
 ---
 
-This blog is hosted with _GitHub Pages_ (built on top of [_Jekyll_](http://jekyllrb.com) server and Jekyll is written in Ruby.) Jekyll is a nice tool for its job, however, the Ruby environment is so brittle: things break easily (e.g. a Gem update, different OS version, etc.) Ideally, locking the Gem versions should do, however, that doesn't always help. An isolated development environment is an absolute necessity. For some time, I curated a VMWare Ubuntu image (I am primarily a Windows user) for Jekyll, and I could publish posts only from that. That setup was not portable at all; I wanted to publish posts or preview drafts from anywhere. Even worse, things came to a halt when I started using _Docker_ in my Windows machine: Docker and VMWare can't run together in Windows (as the former uses _Hyper-V_ virtualization, which VMWare is not compatible with!) I reached the ideal setup later, exploiting Docker itself.
+This blog is hosted with _GitHub Pages_, built on top of [_Jekyll_](http://jekyllrb.com) server and Jekyll is written in Ruby. GitHub Pages is built on the following convention: user creates a public github repository named _userid_.github.io, user writes his posts in Markdown, and GitHub Pages builds the static webpage as user pushes changes to it. The limiting factor here is, however, user cannot see the posts rendered until it is built by GitHub Pages and made public at the same time. User has to create his own local Jekyll build environment to preview posts.
+
+Jekyll is a nice tool for its job, however, the Ruby environment is so brittle: things break easily (e.g. a Gem update, different OS version, etc.) Ideally, locking the Gem versions should do, however, that doesn't always help. An isolated development environment is an absolute necessity. For some time, I curated a VMWare Ubuntu image (I am primarily a Windows user) for Jekyll, and I could publish posts only from that. That setup was not portable at all; I wanted to publish posts or preview drafts from anywhere. Even worse, things came to a halt when I started using _Docker_ in my Windows machine: Docker and VMWare can't run together in Windows (as the former uses _Hyper-V_ virtualization, which VMWare is not compatible with!) I reached the ideal setup later, exploiting Docker itself.
+
+<hr>
 
 Firstly, I had to find the right [Docker image](https://docs.docker.com/glossary/?term=IMAGE) for Jekyll, with Jekyll and necessary dependencies installed. I use the [official Jekyll image](https://hub.docker.com/r/jekyll/jekyll), with tag 3.8.5---that is Jekyll version 3.8.5. The image follows these conventions: [map]() your GitHub Pages repository to the containers `/srv/jekyll` directory, expose port `4000`. A [container](), built from that image, gives an isolated development environment, resolving dependency problems; your page is available on host's mapped port once the container starts properly. 
 
@@ -19,7 +23,7 @@ Next comes, building the right [Docker container](https://docs.docker.com/glossa
 docker run -v "{path to blog repo}:/srv/jekyll" -p 4000:4000 -it jekyll/jekyll:3.8.5 /bin/bash -c "jekyll serve --drafts"
 ```
 
-**Notice!** Specify only the `gem "github-pages", group: :jekyll_plugins` gem---Ruby term for dependency---in your `Gemfile`; all other gems will be resolved automatically. This way you remain close the the official GitHub pages build environment.
+**Notice.** Specify only the `gem "github-pages", group: :jekyll_plugins` gem---Ruby term for dependency---in your `Gemfile`; all other gems will be resolved automatically. This way you remain close the the official GitHub pages build environment.
 {: .notice--info}
 
 **Warning!** The gem snapshot file `Gemfile.lock` locks the gem versions at a certain moment in order to avoid future conflicts. The Ruby dependency manager _Bundler_ respects both the Gemfile and the snapshot file while resolveing dependencies. Unversion the snapshot file; otherwise, gem resolution may fail in the GitHub Pages environment (even if it succeeds in your local environment) and page build too as a result.
