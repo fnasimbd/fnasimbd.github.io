@@ -22,7 +22,7 @@ My setup has a simple console application with *Microsoft Unity* as the DI conta
 
 - **HeavyWeightDependency**. A type that holds read-only static data and has a high memory footprint; it holds a ~11 MB byte array (intentionally large so that impact is easier to observe) and it has no dependencies. We will inject instance of this type into a client type and observe the resultant impact on the application.
 
-```
+{% highlight csharp linenos %}
 internal class HeavyWeightDependency
 {
     private readonly byte[] _image;
@@ -32,11 +32,11 @@ internal class HeavyWeightDependency
         _image = File.ReadAllBytes("large-image.jpg");
     }
 }
-```
+{% endhighlight %}
 
 - **Client**. This type is dependent on an instance of `HeavyWeightDependency` that is injected through its constructor. It also exposes the injected dependency as a read-only public property.
 
-```
+{% highlight csharp linenos %}
 internal class Client
 {
     public HeavyWeightDependency HeavyDependency { get; }
@@ -46,11 +46,11 @@ internal class Client
         HeavyDependency = heavyDependency;
     }
 }
-```
+{% endhighlight %}
 
 - **Application Entry Point**. The usual C# console application entry point: the `Program` class with `Main` method. The application essentially does nothing other than resolving a `Client` instance iteratively from an Unity container every one second. It can also control the lifecycle of `HeavyWeightDependency` (first commented block in the `Main` method) and append the dependency from the resolved `Client` instance into a static list (second commented block in the `Main` method.)
 
-```
+{% highlight csharp linenos %}
 public class Program
 {
     private static IUnityContainer Container { get; } = new UnityContainer();
@@ -78,7 +78,7 @@ public class Program
         Console.ReadKey();
     }
 }
-```
+{% endhighlight %}
 
 ### Experiment
 

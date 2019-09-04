@@ -34,7 +34,7 @@ Both backup and restore are invoked from an `EmbeddableDocumentStore` instance a
 
 Initiating a backup of an embedded database is exceptionally simple. Initialize an `EmbeddableDocumentStore` at the database location, call the `StartBackup()` command method with appropritate parameters, the backup location is created if it doesn't exist, and backup starts asynchronously. The `EmbeddableDocumentStore` instance for backup doesn't need to be dedicated for it; you can use the one that is being used by other operations.
 
-```csharp
+{% highlight csharp linenos %}
 public void Backup(string backupPath)
 {
     try
@@ -55,7 +55,7 @@ public void Backup(string backupPath)
         throw;
     }
 }
-```
+{% endhighlight %}
 
 Parameters to the `StartBackup` method are obvious except the `databaseDocument`. The `databaseDocument` parameter takes some advanced settings of the database being backed up: like specifying the `Id` in it lets you omit the database name during restore; Raven assumes that from the backup directory.
 
@@ -78,7 +78,7 @@ As mentioned in the overview section, restoration can be done with both the clie
 
 Like backup, initiating a restore operation from client API is straightforward. Create and initialize a temporary `EmbeddableDocumentStore` for restore, call `StartRestore` on it, the restore location is created if it doesn't exist, and restore continues asynchronously.
 
-```csharp
+{% highlight csharp linenos %}
 public void Restore(string backupPath, string databaseLocation, string databaseName)
 {
     using (var documentStore = new EmbeddableDocumentStore())
@@ -94,7 +94,7 @@ public void Restore(string backupPath, string databaseLocation, string databaseN
             });
     }
 }
-```
+{% endhighlight %}
 
 Use of the parameter `DatabaseRestoreRequest` passed to `StartRestore` should be obvious. Like backup, restore is also an asynchronous operation. Like `StartBackup`, `StartRestore` also returns an `Operation` object with similar facilities for tracking the operation progress.
 

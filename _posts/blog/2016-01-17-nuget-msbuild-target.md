@@ -24,7 +24,7 @@ MSBuild project files are XML configuration files. To add a custom target, just 
 
 Assuming NuGet manifest file---*.nuspec* file---exists in the project directory, modifiy your project file to something like the following:
 
-```
+{% highlight xml linenos %}
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" InitialTargets="Build" DefaultTargets=" NuGetPack" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <!--Project properties automatically 
@@ -33,13 +33,13 @@ Assuming NuGet manifest file---*.nuspec* file---exists in the project directory,
     <Exec Command="nuget pack YourProjectName.csproj" />
   </Target>
 </Project>
-```
+{% endhighlight %}
 
 Notice that I defined a target called *NuGetPack* on line 5 and inside it called the `nuget pack` command; easy to infer that any command can be added in targes the same way. Also note on line 2 that the target NuGetPack is added to the project's DefaultTargets list; in case you had more than one default targets you would separate them with semicolons. Henceforth, on each subsequent successful build, you are supposed to get your .nupkg file ready in your project folder.
 
 Release build artifacts are usually distributed as package; you may want your packaging target conditional on Release build. Edit line 5 as follows to make target NuGetPack conditional on release build:
 
-```
+```xml
   <Target Name="NuGetPack" Condition=" '$(Configuration)' == 'Release'">
 ```
 
