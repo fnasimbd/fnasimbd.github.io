@@ -60,3 +60,5 @@ I want my local build environment to be identical to that of GitHub Pages', ensu
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
 
 {% endif %}
+
+{% include google-analytics.html %}
