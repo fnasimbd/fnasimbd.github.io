@@ -112,6 +112,9 @@ author:
     - title: GitHub
       url: https://github.com/fnasimbd
       icon: fab fa-github-square
+    - title: Stack Exchange
+      url: https://stackexchange.com/users/305152/fnasim?tab=accounts
+      icon: fab fa-stack-exchange
     - title: LinkedIn
       url: http://www.linkedin.com/in/farhannasim/ 
       icon: fab fa-linkedin
@@ -124,6 +127,9 @@ footer_links:
   - title: GitHub
     url: https://github.com/fnasimbd
     icon: fab fa-github-square
+  - title: Stack Exchange
+    url: https://stackexchange.com/users/305152/fnasim?tab=accounts
+    icon: fab fa-stack-exchange
   - title: LinkedIn
     url: http://www.linkedin.com/in/farhannasim/ 
     icon: fab fa-linkedin
