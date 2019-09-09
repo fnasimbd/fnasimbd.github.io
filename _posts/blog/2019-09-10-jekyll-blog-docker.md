@@ -43,22 +43,4 @@ I want my local build environment to be identical to that of GitHub Pages', ensu
 **Warning!** In some builds, some hyperlinks may not be accessible from host machine and some resources (e.g. images, css files, etc.) may fail to load too because they are generated with base address `0.0.0.0` instead of `localhost`. That happens mainly due to Jekyll version mismatch; choose the correct Jekyll version if you want to stick to the current configuration or update your configurations according to your Jekyll version if you got the correct one.
 {: .notice--warning}
 
-
-{% if page.comments %}
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-    /* * * CONFIGURATION VARIABLES * * */
-    var disqus_shortname = 'fnasim';
-    
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
-
-{% endif %}
-
 {% include google-analytics.html %}
