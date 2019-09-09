@@ -42,5 +42,3 @@ I want my local build environment to be identical to that of GitHub Pages', ensu
 
 **Warning!** In some builds, some hyperlinks may not be accessible from host machine and some resources (e.g. images, css files, etc.) may fail to load too because they are generated with base address `0.0.0.0` instead of `localhost`. That happens mainly due to Jekyll version mismatch; choose the correct Jekyll version if you want to stick to the current configuration or update your configurations according to your Jekyll version if you got the correct one.
 {: .notice--warning}
-
-{% include google-analytics.html %}
