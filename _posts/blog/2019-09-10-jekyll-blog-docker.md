@@ -1,7 +1,6 @@
 ---
 layout: post
 title: "Build Jekyll Blogs with Docker"
-# date: 2019-09-10T00:24:00-00:00
 modified:
 categories: blog
 excerpt: "Building Jekyll blogs with Docker in Windows and the related anomalies."
