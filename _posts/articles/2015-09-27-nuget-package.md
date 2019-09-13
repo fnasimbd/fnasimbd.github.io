@@ -2,7 +2,7 @@
 layout: post
 title: "NuGet Primer"
 description: "An introduction to NuGet package manager article"
-excerpt: "An introduction to NuGet package manager article."
+excerpt: "An introduction to NuGet package manager, how to build NuGet packages, and how to publish them."
 categories: articles
 date: 2015-09-27-T23:23:00-05
 share: true

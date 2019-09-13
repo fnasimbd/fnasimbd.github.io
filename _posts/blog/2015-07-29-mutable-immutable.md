@@ -3,7 +3,7 @@ layout: post
 title: "Mutable and Immutable Objects"
 modified:
 categories: blog
-excerpt:
+excerpt: "Difference between mutable and immutable objects."
 tags: ["object-oriented-programming", "random-notes"]
 comments: true
 date: 2015-07-29T02:58:00-05

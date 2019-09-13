@@ -3,7 +3,7 @@ layout: post
 title: "Backup and Restore RavenDB Embedded Database"
 modified: 
 categories: blog
-excerpt:
+excerpt: "How to backup and restore a RavenDB embedded database."
 tags: ["C#", ".NET", "RavenDB", "Database"]
 image:
 feature:

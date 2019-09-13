@@ -3,7 +3,7 @@ layout: post
 title: "Static Dependency and Memory Usage"
 modified:
 categories: blog
-excerpt:
+excerpt: "Experiment demonstrating how various lifecycles of static dependencies affect memory consumption and how DI containers may optimize memory usage by controlling object lifecycles."
 tags: [".net", "C#", "dependency injection", "Unity", "memory" ]
 image:
 feature:

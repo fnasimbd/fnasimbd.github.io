@@ -3,7 +3,7 @@ layout: post
 title: "C# Application Configuration Basics"
 modified:
 categories: blog
-excerpt:
+excerpt: "Various methods to read-write .NET application configurations."
 tags: [".net", "C#", "configuration", "appconfig"]
 image:
 feature:

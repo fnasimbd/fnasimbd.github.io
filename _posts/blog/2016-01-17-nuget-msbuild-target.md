@@ -3,7 +3,7 @@ layout: post
 title: "NuGet Packaging with MSBuild Targets"
 modified:
 categories: blog
-excerpt:
+excerpt: "How to automatically package MSBuild project outputs into NuGet packages during build."
 tags: [".net", "C#", "NuGet", "package"]
 image:
 feature:
