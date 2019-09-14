@@ -1,0 +1,217 @@
+---
+layout: post
+title: "Map-Reduce Pattern"
+modified:
+categories: articles
+excerpt: "Introduction to the _map-reduce_ pattern and its elegant usage."
+tags: ["map-reduce", "distributed-processing"]
+comments: true
+share: true
+---
+
+_Map_ and _Reduce_ functions, initially part of functional languages like _Lisp_, later of many others, greatly simplify computations on sequences. Later they inspired a model of distributed computation called _MapReduce_, introduced by Google and made ubiquitous with Apache's [Hadoop MapReduce](https://hadoop.apache.org/docs/stable/hadoop-mapreduce-client/hadoop-mapreduce-client-core/MapReduceTutorial.html) framework. This write-up explores the use of map and reduce functions, how they relate to the MapReduce pattern, and how MapReduce pattern is implemented in different libraries.
+
+{% include toc %}
+
+What are Map and Reduce Functions
+=================================
+Map and reduce library functions are common in all major languages, either as static functions or as members of list types. Commonly, both map and reduce functions take a list and a user-defined function as input; <s>map's input function takes one parameter and reduce's</s>; on invocation, they iterate over the list from left to right, and apply the function on each element; map keeps appending the value returned by the function for each value to a new list, and returns that new list, its length being same as the input list, at the end (_maps_ the list to a new one); reduce, on the other hand, cumulatively keeps updating a single value and returns it at the end (_reduces_ the list to a value.) Many list _transformation_ operations can be easily viewed as map operations, and similarly, list _aggregate_ operations (e.g. sum, average, max-min, etc.) can be viewed as reduce operations.
+
+Map and reduce together give a cleaner abstraction for many computation scenarios, mainly by _removing iteration_ from consideration. They recast otherwise complex computations into _declarative_ form: you just pass the functions to be applied, iteration and others are taken care of by them; hence you avoid repeating operations that maybe prone to errors (e.g. iterations).
+
+Map and Reduce Functions in JavaScript
+----------
+Map function gets access to current value, current index, and the corresponding array. An additional parameter called `thisArg` is passed to both map and reduce; passing context with `thisArg` helps the functions remain _pure_---that is no access to global data. The following example maps an input array to its squares.
+
+{% highlight javascript linenos %}
+var arr = [1, 2, 3, 4, 5];
+
+var res = arr.map((value, ind, arr) => {
+    return value * value;
+});
+
+// output: [ 1, 4, 9, 16, 25 ]
+{% endhighlight %}
+
+Reduce function has access to the previous value, current value, and the corresponding array. The following example reduces an input array to the product of its elements.
+
+{% highlight javascript linenos %}
+var arr = [1, 2, 3, 4];
+
+var res = arr.reduce((pre, cur, arr) => {
+    return pre * cur;
+});
+
+// output: 24
+{% endhighlight %}
+If the optional parameter `thisArg` is passed to `reduce`, that is assumed to be the initial value, otherwise the first element in the respective array is.
+
+{% highlight javascript linenos %}
+
+var res = arr.reduce((pre, cur, arr) => {
+    return pre * cur;
+}, 5);
+
+// output: 120
+{% endhighlight %}
+
+Outside the syntactic differences, other languages implement map and reduce more or less the same way.
+
+Map-Reduce Index in RavenDB Document Database
+=============================================
+The index and query operation in [RavenDB](https://ravendb.net/docs/article-page/4.0/csharp), the NoSQL document database, is a compelling example of how map and reduce functions together simplifies a complex job. Before going into its details, very briefly how RavenDB and its index and query operation works: RavenDB organizes _documents_ into _collections_ (for simplicity, you may view documents as objects with a mandatory unique id field and collections as list of all objects in the database of a certain object type); each time a new document is added to the database, it is appended to its corresponding collection if the collection already exists, or a new collection is created for it.
+
+In RavenDB, users can perform queries to find documents satisfying some criteria, however, performing queries require creating corresponding indexes prior to that. Let's assume we have a collection called `Persons` with fields `Name`, `City`, `Country`, and maybe others, and we want to find all persons from a certain city in that collection; to achieve this, we have to create an index on the field `City` and query on it with desired city name (called _querying an index_ in RavenDB terminology).
+
+{% highlight csharp linenos %}
+public class Person
+{
+    public string Name { get; set; }
+
+    public string City { get; set; }
+
+    public string Country { get; set; }
+}
+{% endhighlight %}
+
+Now, what happens if we want to query results of aggregate operations? For example, in the collection of persons, the number of persons from a certain city? The answer is creating a [map-reduce index](https://ravendb.net/docs/article-page/4.0/csharp/indexes/map-reduce-indexes) on the collection, where the map function transforms each document into the aggregate result of itself and the reduce function computes the same aggregate result for the entire collection (from the temporary results computed by map.) Here follows sample implementation of a map-reduce index for the `Persons` collection.
+
+{% highlight csharp linenos %}
+public class Persons_Count_ByCity : 
+    AbstractIndexCreationTask<Person, Persons_Count_ByCity.Result>
+{
+    public class Result
+    {
+        public string City { get; set; }
+
+        public int PersonCount { get; set; }
+    }
+
+    public Persons_Count_ByCity()
+    {
+        Map = persons => from person in persons
+                         let cityName = LoadDocument<Person>(person.City).Name
+                         select new
+                         {
+                             City = cityName ,
+                             PersonCount = 1
+                         };
+
+        Reduce = results => from result in results
+                            group result by result.City into g
+                            let personCount = g.Sum(x => x.PersonCount)
+                            select new
+                            {
+                                City = g.Key,
+                                PersonCount = personCount
+                            };
+    }
+}
+{% endhighlight %}
+
+Notice that in the index's constructor, user passes the map and reduce functions as `Map` and `Reduce` properties respectively; `Map` iterates over the entire `Persons` collection and transforms each `Person` document into a `Result` instance; hence each `Result` instance contains the local person count (1) for each document; `Reduce` iterates over the Results collection produced by Map earlier and produces one `Result` instance containing the aggregate count (sum of all `Result` with the same `City` name) for each city. Once the index is prepared, for each query on it with a city specified, the index returns a `Result` object containing the sum of all person from there. For more advanced queries, user may customize Result type to store relevant data for computing the aggregate result during reduce.
+
+The _MapReduce_ Distributed Computation Model
+=============================================
+Let's assume some documents are scattered over multiple nodes of a cluster, some aggregate result (e.g. computing sum of all integers, counting occurrence of all words, creating inverted index of words, etc.) is to be computed on them. In these situations, where data and computation are distributed over multiple machines, MapReduce comes in: it is a framework, a model of distributed computation, introduced in 2004, by Google's [Jeffrey Dean and Sanjay Ghemawat](https://static.googleusercontent.com/media/research.google.com/en//archive/mapreduce-osdi04.pdf); they brought map and reduce in distributed setting. A typical MapReduce setup consists of a mandatory _master node_ and several _worker nodes_; the master node accepts computation jobs---MapReduce jobs---defined by user, distributes them over the worker nodes, and orchestrates the overall computation until end. MapReduce is primarily inspired by map and reduce functions, and its operation, as we will see, closely resembles that of RavenDB's map-reduce index.
+
+For a single MapReduce job, user defines a pair of map and reduce functions. Map and reduce functions are slightly modified to make them suitable for distributed processing, and are orchestrated to work together. The map function receives _input key-value pairs_ (e.g. _\<document_001, word_1\>_), where the key identifies the document, and for each input key-value pair, it outputs a set of _intermediate key-value_ pairs (e.g. _\<word_1, 1\>_); those intermediate key-value pairs (e.g. _\<word_1, 1, 1, 1\>_), possibly from different nodes in a cluster, are grouped together by the MapReduce library, and are then forwarded to the reduce function to produce the final _result key-value pairs_ (e.g. _\<word_1, 3\>_). The following pseudocode example from Dean and Ghemawat paper counts the occurrence of each word in a set of documents:
+
+{% highlight linenos %}
+map(String key, String value):
+    // key: document name
+    // value: document contents
+    for each word w in value:
+        EmitIntermediate(w, "1");
+
+reduce(String key, Iterator values):
+    // key: a word
+    // values: a list of counts
+    int result = 0;
+    for each v in values:
+        result += ParseInt(v);
+    Emit(AsString(result));
+{% endhighlight %}
+
+A great variety of problems---theoretically, any aggregate operation---can be modelled as MapReduce jobs. Often reduce outputs are kept in place and successive MapReduce jobs are run on them to reach some final result.
+
+MapReduce jobs are defined as implementations of some interface defined by the MapReduce library, and are submitted to master node through network; rest of the task (e.g. division, scheduling, storing-retrieving data, error control, etc.) happens within the library. The MapReduce library partitions the map and reduce tasks and assigns them to different cluster nodes to run in parallel; the nodes where map operation executes also contains the data, exploiting locality to improve performance.
+
+**Commutativity and Associativity of Reduce and the Resultant Optimization**<br><br>As an optional optimization, where the reduce function is both _commutative_ and _associative_, user can submit a _combiner function_ (usually the reduce function itself) that eliminates duplicates before invoking reduce, thus reducing bandwidth usage; commutativity and assoicativity property ensures that reduce function can be called in any order hence applying reduce function once at the mapping sites, before the actual call, produces the same result.
+{: .notice--info}
+
+The Apache Hadoop MapReduce Framework
+-------------------------------------
+
+Apache Hadoop MapReduce is perhaps the most popular open source implementation of MapReduce for JVM platform. Built on top of Apache Hadoop ecosystem, it integrates well with its other components like HDFS, Zookeeper, etc. It provides user interfaces to submit their map and reduce functions as JARs, concurrency safe data structures to store the computation results. The following snippet, written in MapReduce's Java API (it has APIs for other languages too,) shows how the map and reduce functions for a job that computes inverted index of words in documents may look like.
+
+{% highlight java linenos %}
+public static class InvertedIndexMapper extends Mapper<LongWritable, Text, Text, Text> {
+    private final Text document = new Text();
+    private Text word = new Text();
+
+    public void map(LongWritable key, Text value, Context context)
+            throws IOException, InterruptedException {
+        String documentName = ((FileSplit) context.getInputSplit()).getPath().getName();
+        document.set(documentName);
+
+        StringTokenizer itr = new StringTokenizer(value.toString());
+
+        while (itr.hasMoreTokens()) {
+            word.set(itr.nextToken());
+            context.write(word, document);
+        }
+    }
+}
+
+public static class InvertedIndexReducer extends Reducer<Text, Text, Text, Text> {
+    public void reduce(Text key, Iterable<Text> values, Context context)
+            throws IOException, InterruptedException {
+        StringBuffer buffer = new StringBuffer();
+
+        for (Text val : values) {
+            if (buffer.length() != 0) {
+                buffer.append(" ");
+            }
+
+            buffer.append(val.toString());
+        }
+
+        Text documentList = new Text();
+        documentList.set(buffer.toString());
+
+        context.write(key, documentList);
+    }
+}
+{% endhighlight %}
+
+**MapReduce and _Apache Spark_**<br><br>MapReduce got synonymous with Apache MapReduce. It is just one of the many MapReduce implementations; just like Google's original C++ based one had been.<br><br>The [Apache Spark](https://spark.apache.org/) framework---de facto replacement of Apache MapReduce---also supports [map](https://spark.apache.org/docs/2.2.0/rdd-programming-guide.html#transformations) and [reduce](https://spark.apache.org/docs/2.2.0/rdd-programming-guide.html#actions) tasks among many others. Spark, however, replaces MapReduce's file system-based, inefficient operations with a more capable data structure called _Resilient Distributed Datasets (RDD)_.
+{: .notice--info}
+
+MapReduce in non-distributed multi-core environment
+---------------------------------------------------
+Though MapReduce is mainly suited for large-scale distributed processing, many tasks even in single-node multi-core environment can be simplified with it. Microsoft's _Parallel LINQ_ library supports Map-Reduce processing for multi-core.
+
+{% highlight csharp linenos %}
+public static ParallelQuery<TResult> MapReduce<TSource, TMapped, TKey, TResult>(
+    this ParallelQuery<TSource> source, Func<TSource, IEnumerable<TMapped>> map, 
+    Func<TMapped, TKey> keySelector, 
+    Func<IGrouping<TKey, TMapped>, IEnumerable<TResult>> reduce)
+{
+    return source.SelectMany(map).GroupBy(keySelector).SelectMany(reduce);
+}
+{% endhighlight %}
+
+{% highlight csharp linenos %}
+var files = Directory.EnumerateFiles(dirPath, "*.txt").AsParallel();
+var counts = files.MapReduce(
+    path => File.ReadLines(path).SelectMany(line => line.Split(delimiters)), 
+    word => word, 
+    group => new[] { new KeyValuePair<string, int>(group.Key, group.Count()) });
+{% endhighlight %}
+
+References
+----------
+1. [A reference](https://courses.cs.washington.edu/courses/cse454/05au/slides/08-map-reduce.pdf).
+2. [Another reference](https://lintool.github.io/MapReduceAlgorithms/MapReduce-book-final.pdf).
+3. [Aggregating with Apache Spark](https://www.javaworld.com/article/3184109/aggregating-with-apache-spark.html)
