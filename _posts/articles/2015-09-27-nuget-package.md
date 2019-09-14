@@ -13,6 +13,8 @@ comments: true
   <meta name="description" content="{{ page.description}}" />
 {% endif %}
 
+{% include toc %}
+
 # Package Management: Very Briefly
 
 Large software projects depend on several other components: called *dependencies*; those maybe developed by other in-house teams or may come from external sources. The same dependency maybe built for several platform and CPU architecture combinations, or possibly available in several variants. Consumers of a dependency must make sure that they have the right version and variant. Moreover, if the dependency itself is under development, each time an update is released the consumer project may need to pull and integrate that update. Additionaly, as a project's source is distributed to other developers so must be the dependencies---preferably from a central repository. Most importantly, all of these must happen with least confusion and time.
@@ -33,13 +35,13 @@ In this section, I will give brief overview of NuGet's working method and the co
 
 This will be sufficient to make it work in very simple situations. NuGet is, however, highly configurable and supports many advanced features that lets you handle complex environments. I will leave references for further study wherever relevant.
 
-#### NuGet Package File
+## NuGet Package File
 
 NuGet bundles a project's build artifacts into a single `.nupkg` file for distribution. It includes project output, any auxiliary files (as configured by user), meta information, reference to other packages, etc. A single .nupkg file represents a distinct version of the package; that is, each time you publish a new version of your package, you create a new .nupkg file.
 
 As a file format, .nupkg is essentially an archive. Get a .nupkg file and open it with WinRAR and explore what's inside for better insight.
 
-#### NuGet Package Directory Structure
+## NuGet Package Directory Structure
 
 Inside the .nupkg archive, package contents are organized in directories. Depending on the configurations specified, a package's directory structure may be very complex. Usually, however, NuGet organizes package contents in the following directory structure:
 
@@ -49,7 +51,7 @@ Inside the .nupkg archive, package contents are organized in directories. Depend
 
 For short, the contents inside `lib` are added to the target project's reference and contents of the `content` folder is copied to the target project's root path.
 
-#### NuGet Project Manifest (.nuspec) File
+## NuGet Project Manifest (.nuspec) File
 
 Each package published by NuGet is coupled with a manifest file (an XML configuration file.) This file specifies how the package is going to look like: it describes a package's identity, its file organization, what consumers will get or not, and many other things.  Here is how a sample nuspec file looks like on its creation:
 
@@ -90,7 +92,7 @@ Nuspec files and NuGet overall have excellent integration with Visual Studio and
 
 For exahustive coverage on nuspec file see official [Nuspec reference](https://docs.nuget.org/Create/NuSpec-Reference).
 
-#### NuGet Client
+## NuGet Client
 
 Coordinating both package publication and consumption, NuGet client is at the heart of NuGet package management environment. It is available in three formats:
 
@@ -102,19 +104,19 @@ Among them only NuGet Command Line can create and publish packages; though NuGet
 
 *Aside:* rather secretly, in Windows 10 Microsoft has [introduced](http://www.howtogeek.com/200334/windows-10-includes-a-linux-style-package-manager-named-oneget/) a Linux style package manager, called [*OneGet*](http://blogs.technet.com/b/windowsserver/archive/2014/04/03/windows-management-framework-v5-preview.aspx). It comes as PowerShell commandlet and interestingly many OneGet commands resemble NuGet ones!
 
-#### NuGet Feed
+## NuGet Feed
 
 Provider of NuGet packages. A feed can be a local or network shared directory (*local feed* in NuGet jargon) or a web server (*remote feed* in NuGet jargon.) Feed manages the location where packages are stored by package publishers and pulled from by consumers.
 
 NuGet client can handle multiple feeds. Unless configured otherwise, client picks up package sources from *%APPDATA%\NuGet\NuGet.Config* file.
 
-#### Other Tools
+## Other Tools
 
 Outside the above-mentioned, there are various other tools developed by external projects that enhance NuGet functionalities. For an overview of those tools and projects and their relationship with NuGet, see the official [NuGet Ecosystem](https://docs.nuget.org/contribute/ecosystem) documentation.
 
 # Setting Up NuGet
 
-#### Install NuGet Client
+## Install NuGet Client
 
 Installing both the command prompt utility and the Visual Studio extension, which also includes the PowerShell Package Manager Console, are straightforward and I recommend having both.
 
@@ -122,7 +124,7 @@ Download the NuGet command line utility from its [home page](https://nuget.org/n
 
 NuGet Package Manager extension comes pre-installed in Visual Studio 2012 or later. In earlier versions, install it through *Tools > Extensions Manager*. Once installed, you can access both the Package Manager Dialog and the Package Manager Console from *Tools > NuGet Package Manager* menu in Visual Studio.
 
-#### Setup NuGet Feed
+## Setup NuGet Feed
 
 Setup a network path with write permission to package authors and read permission to package users (for this article I will use `\\farhan-lenovo\nuget-feed`); this will be your NuGet feed for now.
 
@@ -158,7 +160,7 @@ Publishing first release of the project done! Assuming you don't change meta inf
 
 You can consume NuGet packages through all three variants of NuGet client that I described earlier. Among them, however, I find the Package Manager Dialog more suitable for an introduction; in the following sections, I am going to show basic NuGet package management operations with this. Once you get used with the Package Manager Dialog, you can pick up the other two clients, Command Prompt and Package Manager Console, by studying their references yourself.
 
-#### Configuring Package Source
+## Configuring Package Source
 
 First step to using NuGet packages is to configure your package sources. By default only one, nuget.org, feed is available as package source. To add your own feed, do the following steps:
 
@@ -171,7 +173,7 @@ You are done!
 
 ![config-src]({{ '/images/config-src.png' | relative_url }})
 
-#### Installing Packages
+## Installing Packages
 
 Now let's install the package Miscellaneous, that we published earlier, in some other project. Open the target project in Visual Studio, go to *Tools > NuGet Package Manager > Manage NuGet Packages for Solution...* The package browser window will appear; in the Online tab find and select Test Package Source. All packages available in the current feed, including Miscellaneous, is listed here. Select and click the install button beside Miscellaneous.
 
@@ -179,7 +181,7 @@ Now let's install the package Miscellaneous, that we published earlier, in some 
 
 If your package installation is successful, you will see these changes in your project: a library called Miscellaneous.dll is added to the project references, a new folder called *packages* is created under your solution directory, and a file called *packages.config* is included in your project. The 'packages' folder contains the package you just installed and all further packages you install in any other project under the same solution; the 'packages.config' file contains information of the packages the project is dependent on in XML format.
 
-#### Updating Packages
+## Updating Packages
 
 Suppose you have made some changes to the package Miscellaneous and want to publish a new version. Make the changes you wish and follow steps 3 to 6 in section *Authoring NuGet Packages* to have the new version published.
 
@@ -187,13 +189,13 @@ To get the update, open package browser window just the way we did it during ins
 
 ![update-package]({{ '/images/update-package.png' | relative_url }})
 
-#### Uninstalling Packages
+## Uninstalling Packages
 
 Open package browser window, select 'Installed Packages' tab. The package 'Miscellaneous' should appear here with an 'Uninstall' button beside it. Click that Uninstall button. Package is uninstalled; the reference to 'Miscellaneous.dll' as well as the folder 'Miscellaneous' in packages folder under solution directory disappears if uninstallation is successful.
 
 ![uninstall-package]({{ '/images/uninstall-package.png' | relative_url }})
 
-#### Restoring Packages
+## Restoring Packages
 
 NuGet can fetch missing packages from feed automatically---a feature called *restoring packages*. Package Manager Dialog doesn't support package restoring; however, by default Visual Studio restores packages on each build. Do the following to test the package restore feature: have the package Miscellaneous installed in some project, delete or rename the packages folder under your solution directory, build your solution from Visual Studio. If build is successful the packages folder under solution directory must be available again with its contents.
 
