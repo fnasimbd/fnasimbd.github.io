@@ -15,9 +15,9 @@ _Map_ and _Reduce_ functions, initially part of functional languages like _Lisp_
 
 What are Map and Reduce Functions
 =================================
-Map and reduce library functions are common in all major languages, either as static functions or as members of list types. Commonly, both map and reduce functions take a list and a user-defined function as input; <s>map's input function takes one parameter and reduce's</s>; on invocation, they iterate over the list from left to right, and apply the function on each element; map keeps appending the value returned by the function for each value to a new list, and returns that new list, its length being same as the input list, at the end (_maps_ the list to a new one); reduce, on the other hand, cumulatively keeps updating a single value and returns it at the end (_reduces_ the list to a value.) Many list _transformation_ operations can be easily viewed as map operations, and similarly, list _aggregate_ operations (e.g. sum, average, max-min, etc.) can be viewed as reduce operations.
+Map and reduce library functions are common in all major languages, either as static functions or as members of list types. Commonly, both map and reduce functions take a list and a user-defined function as input; <s>map's input function takes one parameter and reduce's</s>; on invocation, both iterates over the list from left to right, and apply the function on each element. Map keeps appending the value returned by the function for each value to a new list, and returns that new list, its length being the same as the input list, at the end (_maps_ the list to a new one); reduce, on the other hand, cumulatively keeps updating a single value and returns it at the end (_reduces_ the list to a value.) Many list _transformation_ operations can be easily viewed as map operations, and similarly, list _aggregate_ operations (e.g. sum, average, max-min, etc.) can be viewed as reduce operations.
 
-Map and reduce together give a cleaner abstraction for many computation scenarios, mainly by _removing iteration_ from consideration. They recast otherwise complex computations into _declarative_ form: you just pass the functions to be applied, iteration and others are taken care of by them; hence you avoid repeating operations that maybe prone to errors (e.g. iterations).
+Map and reduce achieves concurrency safety by removing _side-effects_ due to explicit access to global data (though you may access global data with _closure_ if your language supports it.) Map and reduce together give a cleaner abstraction for many computation scenarios, mainly by _removing iteration_ from consideration. They recast otherwise complex computations into _declarative_ form: you just pass the functions to be applied, iteration and others are taken care of by them; hence you avoid repeating operations that maybe prone to errors (e.g. iterations).
 
 Map and Reduce Functions in JavaScript
 ----------
@@ -56,6 +56,9 @@ var res = arr.reduce((pre, cur, arr) => {
 {% endhighlight %}
 
 Outside the syntactic differences, other languages implement map and reduce more or less the same way.
+
+**Map-reduce Input Functions and _Closures_**<br><br>An obvious question raises when the input functions access data (variables) out of their scope. That brings us to _closures_. As I said earlier, map and reduce are concepts imported from functional languages where all data are passed as parameters. Closure itself is a complex idea and deserves separate treatment. You may consult the following references: this stackoverflow [answer](https://stackoverflow.com/a/7464475/615119) for a short introduction and MDN [reference](://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures) for extensive treatment.
+{: .notice--info}
 
 Map-Reduce Index in RavenDB Document Database
 =============================================
