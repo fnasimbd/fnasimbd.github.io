@@ -125,22 +125,3 @@ The current example illustrates the case of memory usage for objects with very h
 1. *[Understanding Lifetime Managers.](https://msdn.microsoft.com/en-us/library/ff660872(v=pandp.20).aspx)* Unity documentation on its object lifetime management.
 2. *["Dependency Injection with Unity" book (PDF and EPUB.)](https://www.microsoft.com/en-us/download/details.aspx?id=39944)* Comprehensive introduction to Microsoft Unity.
 
-{% if page.comments %}
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-    /* * * CONFIGURATION VARIABLES * * */
-    var disqus_shortname = 'fnasim';
-
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
-
-{% endif %}
-
-{% include google-analytics.html %}
-
