@@ -116,7 +116,7 @@ author:
       url: https://stackexchange.com/users/305152/fnasim?tab=accounts
       icon: fab fa-stack-exchange
     - title: LinkedIn
-      url: http://www.linkedin.com/in/farhannasim/ 
+      url: https://www.linkedin.com/in/farhannasim/
       icon: fab fa-linkedin
 
 # Footer Links
@@ -131,7 +131,7 @@ footer_links:
     url: https://stackexchange.com/users/305152/fnasim?tab=accounts
     icon: fab fa-stack-exchange
   - title: LinkedIn
-    url: http://www.linkedin.com/in/farhannasim/ 
+    url: https://www.linkedin.com/in/farhannasim/
     icon: fab fa-linkedin
   - title: Feed
     url: atom.xml
