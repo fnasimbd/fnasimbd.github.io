@@ -1,6 +1,9 @@
 ---
 layout: post
 title: "C# Application Configuration Basics"
+redirect_from:
+  - /blog/c-sharp-configurations
+  - /blog/c-sharp-configurations/
 modified:
 categories: blog
 excerpt: "Various methods to read-write .NET application configurations."
