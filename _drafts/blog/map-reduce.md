@@ -60,11 +60,11 @@ Outside the syntactic differences, other languages implement map and reduce more
 **Map-reduce Input Functions and _Closures_**<br><br>An obvious question raises when the input functions access data (variables) out of their scope. That brings us to _closures_. As I said earlier, map and reduce are concepts imported from functional languages where all data are passed as parameters. Closure itself is a complex idea and deserves separate treatment. You may consult the following references: this stackoverflow [answer](https://stackoverflow.com/a/7464475/615119) for a short introduction and MDN [reference](://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures) for extensive treatment.
 {: .notice--info}
 
-Map-Reduce Index in RavenDB Document Database
+_Map-Reduce Index_ in RavenDB
 =============================================
-The index and query operation in [RavenDB](https://ravendb.net/docs/article-page/4.0/csharp), the NoSQL document database, is a compelling example of how map and reduce functions together simplifies a complex job. Before going into its details, very briefly how RavenDB and its index and query operation works: RavenDB organizes _documents_ into _collections_ (for simplicity, you may view documents as objects with a mandatory unique id field and collections as list of all objects in the database of a certain object type); each time a new document is added to the database, it is appended to its corresponding collection if the collection already exists, or a new collection is created for it.
+The index and query operation in [RavenDB](https://ravendb.net/docs/article-page/4.0/csharp), the NoSQL document database, is a compelling example of how map and reduce functions together simplifies a complex job. Before going into its details, a very brief overview of how RavenDB and its index and query operation works: RavenDB organizes _documents_ into _collections_ (for simplicity, you may view documents as objects with a mandatory unique id field and collections as list of all objects in the database of a certain object type); each time a new document is added to the database, it is appended to its corresponding collection if the collection already exists, or a new collection is created for it.
 
-In RavenDB, users can perform queries to find documents satisfying some criteria, however, performing queries require creating corresponding indexes prior to that. Let's assume we have a collection called `Persons` with fields `Name`, `City`, `Country`, and maybe others, and we want to find all persons from a certain city in that collection; to achieve this, we have to create an index on the field `City` and query on it with desired city name (called _querying an index_ in RavenDB terminology).
+In RavenDB, users can perform queries to find documents satisfying some criteria, however, performing queries require creating corresponding _indexes_ prior to that. Let's assume we have a collection called `Persons` with fields `Name`, `City`, `Country`, and maybe others, and we want to find all persons from a certain city in that collection; to achieve this, we have to create an index on the field `City` and query on it with desired city name (called _querying an index_ in RavenDB terminology.) Querying fields is straightforward; RavenDB even automatically creates indexes for simple queries on fields.
 
 {% highlight csharp linenos %}
 public class Person
@@ -77,7 +77,10 @@ public class Person
 }
 {% endhighlight %}
 
-Now, what happens if we want to query results of aggregate operations? For example, in the collection of persons, the number of persons from a certain city? The answer is creating a [map-reduce index](https://ravendb.net/docs/article-page/4.0/csharp/indexes/map-reduce-indexes) on the collection, where the map function transforms each document into the aggregate result of itself and the reduce function computes the same aggregate result for the entire collection (from the temporary results computed by map.) Here follows sample implementation of a map-reduce index for the `Persons` collection.
+Now, what happens if we want to query results of aggregate operations? For example, in the collection of persons, the number of persons from a certain city? It can be modelled as a map-reduce problem with a small tweak: map each document to _<city, count>_ pairs with _count_ = 1 hence after map we get. Next, group the resultant pairs by city, and for each group, reduce the pairs to one with the sum of counts. RavenDB supports [map-reduce index](https://ravendb.net/docs/article-page/4.0/csharp/indexes/map-reduce-indexes) out-of-the-box, where the map function transforms each document into the aggregate result of itself and the reduce function computes the same aggregate result for the entire collection (from the temporary results computed by map.) Here follows sample implementation of a map-reduce index for the `Persons` collection.
+
+**Caution.** The remainder of this section implements an actual map-reduce index according to the conceptual description in the preceding paragraph and assumes little bit familiarity with C# and its LINQ library. You may, however, skip to the next section without loosing the essence of the main theme.
+{: .notice--warning}
 
 {% highlight csharp linenos %}
 public class Persons_Count_ByCity : 
@@ -112,7 +115,7 @@ public class Persons_Count_ByCity :
 }
 {% endhighlight %}
 
-Notice that in the index's constructor, user passes the map and reduce functions as `Map` and `Reduce` properties respectively; `Map` iterates over the entire `Persons` collection and transforms each `Person` document into a `Result` instance; hence each `Result` instance contains the local person count (1) for each document; `Reduce` iterates over the Results collection produced by Map earlier and produces one `Result` instance containing the aggregate count (sum of all `Result` with the same `City` name) for each city. Once the index is prepared, for each query on it with a city specified, the index returns a `Result` object containing the sum of all person from there. For more advanced queries, user may customize Result type to store relevant data for computing the aggregate result during reduce.
+Notice that in the index's constructor, user passes the map and reduce functions as `Map` and `Reduce` properties respectively. In the first pass, `Map` iterates over the entire `Persons` collection and transforms each `Person` document into a `Result` instance containing the person count as 1---that is the document itself; `Reduce` iterates over the Results collection produced by Map earlier and produces one `Result` instance containing the aggregate count (sum of all `Result` with the same `City` name) for each city. Once the index is prepared, for each query on it with a city specified, the index returns a `Result` object containing the sum of all person from there. For more complex queries, user may augment the `Result` type to store relevant data from `Person` for computing the aggregate result during reduce.
 
 The _MapReduce_ Distributed Computation Model
 =============================================
