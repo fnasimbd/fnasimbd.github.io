@@ -1,6 +1,9 @@
 ---
 layout: post
 title: "NuGet Primer"
+redirect_from:
+  - /articles/nuget-package
+  - /articles/nuget-package/
 description: "An introduction to NuGet package manager article"
 excerpt: "An introduction to NuGet package manager, how to build NuGet packages, and how to publish them."
 categories: articles

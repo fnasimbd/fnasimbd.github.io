@@ -1,6 +1,9 @@
 ---
 layout: post
 title: "Static Dependency and Memory Usage"
+redirect_from:
+  - /blog/static-dependency-memory
+  - /blog/static-dependency-memory/
 modified:
 categories: blog
 excerpt: "Experiment demonstrating how various lifecycles of static dependencies affect memory consumption and how DI containers may optimize memory usage by controlling object lifecycles."

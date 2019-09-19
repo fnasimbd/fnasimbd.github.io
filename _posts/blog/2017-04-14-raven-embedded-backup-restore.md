@@ -1,6 +1,9 @@
 ---
 layout: post
 title: "Backup and Restore RavenDB Embedded Database"
+redirect_from:
+  - /blog/raven-embedded-backup-restore
+  - /blog/raven-embedded-backup-restore/
 modified: 
 categories: blog
 excerpt: "How to backup and restore a RavenDB embedded database."

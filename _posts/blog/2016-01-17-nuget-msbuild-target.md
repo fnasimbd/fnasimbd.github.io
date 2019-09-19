@@ -1,6 +1,9 @@
 ---
 layout: post
 title: "NuGet Packaging with MSBuild Targets"
+redirect_from:
+  - /blog/nuget-msbuild-target
+  - /blog/nuget-msbuild-target/
 modified:
 categories: blog
 excerpt: "How to automatically package MSBuild project outputs into NuGet packages during build."

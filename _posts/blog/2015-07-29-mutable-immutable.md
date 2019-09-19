@@ -1,6 +1,9 @@
 ---
 layout: post
 title: "Mutable and Immutable Objects"
+redirect_from:
+  - /blog/mutable-immutable
+  - /blog/mutable-immutable/
 modified:
 categories: blog
 excerpt: "Difference between mutable and immutable objects."
