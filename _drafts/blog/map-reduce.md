@@ -15,9 +15,7 @@ _Map_ and _Reduce_ functions, initially part of functional languages like _Lisp_
 
 What are Map and Reduce Functions
 =================================
-Map and reduce library functions are common in all major languages, either as static functions or as members of list types. Commonly, both map and reduce functions take a list and a user-defined function as input; <s>map's input function takes one parameter and reduce's</s>; on invocation, both iterates over the list from left to right, and apply the function on each element. Map keeps appending the value returned by the function for each value to a new list, and returns that new list, its length being the same as the input list, at the end (_maps_ the list to a new one); reduce, on the other hand, cumulatively keeps updating a single value and returns it at the end (_reduces_ the list to a value.) Many list _transformation_ operations can be easily viewed as map operations, and similarly, list _aggregate_ operations (e.g. sum, average, max-min, etc.) can be viewed as reduce operations.
-
-Map and reduce achieves concurrency safety by removing _side-effects_ due to explicit access to global data (though you may access global data with _closure_ if your language supports it.) Map and reduce together give a cleaner abstraction--- mainly by _removing iteration_ from consideration---for many computation scenarios, called **map-reduce pattern**. In this pattern, a task over a collection is divided into two phases: **map phase** and **reduce phase**; during the map phase, the **source collection** is transformed into an **intermediate collection** and during the following reduce phase, some final **aggregate result** is computed from the intermediate collection. As we will see, it recasts otherwise complex computations into _declarative_ form: you just pass the functions to be applied, iteration and others are taken care of by them; hence you avoid repeating operations that maybe prone to errors (e.g. iterations).
+Map and reduce library functions are common in all major languages, either as static functions or as members of list types. Commonly, both map and reduce functions take a list and a user-defined function as input; <s>map's input function takes one parameter and reduce's</s>; on invocation, both iterates over the list from left to right, and apply the function on each element. Map keeps appending the value returned by the function for each value to a new list, and returns that new list, its length being the same as the input list, at the end (**maps the list** to a new one); reduce, on the other hand, cumulatively keeps updating a single value and returns it at the end (**reduces the list** to a value.) Many list _transformation_ operations can be easily viewed as map operations, and similarly, list _aggregate_ operations (e.g. sum, average, max-min, etc.) can be viewed as reduce operations.
 
 Map and Reduce Functions in JavaScript
 ----------
@@ -44,25 +42,17 @@ var res = arr.reduce((pre, cur, arr) => {
 
 // output: 24
 {% endhighlight %}
-If the optional parameter `thisArg` is passed to `reduce`, that is assumed to be the initial value, otherwise the first element in the respective array is.
-
-{% highlight javascript linenos %}
-
-var res = arr.reduce((pre, cur, arr) => {
-    return pre * cur;
-}, 5);
-
-// output: 120
-{% endhighlight %}
 
 Outside the syntactic differences, other languages implement map and reduce more or less the same way.
 
-**Map-reduce Input Functions and _Closures_**<br><br>As we have seen, map and reduce takes functions as input. An obvious question arises when the input functions access data (variables) out of their scope. That brings us to _closures_. As I said earlier, map and reduce are concepts imported from functional languages where all data are passed as parameters. Closure itself is a complex idea and deserves separate treatment. You may consult the following references: this stackoverflow [answer](https://stackoverflow.com/a/7464475/615119) for a short introduction and MDN [reference](://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures) for extensive treatment.
+**Map-Reduce Input Functions and _Closures_**<br><br>As we have seen, map and reduce takes functions as input. An obvious question arises when the input functions access data (variables) out of their scope. That brings us to _closures_. As I said earlier, map and reduce are concepts imported from functional languages where all data are passed as parameters. Closure itself is a complex idea and deserves separate treatment. You may consult the following references: this stackoverflow [answer](https://stackoverflow.com/a/7464475/615119) for a short introduction and MDN [reference](://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures) for extensive treatment.
 {: .notice--info}
+
+Map and reduce together give a cleaner, **scalable** abstraction for various computations over collections. It is called **map-reduce pattern**; in this pattern, a task is divided into two phases: **map phase** and **reduce phase**; during the map phase, the **source collection** is mapped to an **intermediate collection** and during the following reduce phase, some final **aggregate result** is computed from the intermediate collection. As we will see, it recasts otherwise complex computations into _declarative_ form: you just pass the functions to be applied, iteration---which may be error-prone---and others are taken care of by it.
 
 _Map-Reduce Index_ in RavenDB
 =============================================
-The index and query operation in [RavenDB](https://ravendb.net/docs/article-page/4.0/csharp), the NoSQL document database, is a compelling real-world example of map and reduce together simplifying a complex job. Before going into its details, a very brief overview of how RavenDB and its index and query operation works is necessary: RavenDB organizes _documents_ into _collections_ (for simplicity, you may view documents as objects with a mandatory unique id field and collections as list of all objects in the database of a certain object type); each time a new document is added to the database, it is appended to its corresponding collection if the collection already exists, or a new collection is created for it.
+The index and query operation of [RavenDB](https://ravendb.net/docs/article-page/4.0/csharp), the NoSQL document database, is a compelling real-world use of map-reduce pattern simplifying a complex job. Before going into its details, a very brief overview of how RavenDB and its index and query operation works is necessary: RavenDB organizes _documents_ into _collections_ (for simplicity, you may view documents as objects with a mandatory unique id field and collections as list of all objects in the database of a certain object type); each time a new document is added to the database, it is appended to its corresponding collection if the collection already exists, or a new collection is created for it.
 
 In RavenDB, users can perform queries to find documents satisfying some criteria, however, performing queries require creating corresponding _indexes_ prior to that. Let's assume we have a collection called `Persons` with fields `Name`, `City`, `Country`, and maybe others, and we want to find all persons from a certain city in that collection; to achieve this, we have to create an index on the field `City` and query on it with desired city name (called _querying an index_ in RavenDB terminology.) Querying fields is straightforward; RavenDB even automatically creates indexes for simple queries on fields.
 
