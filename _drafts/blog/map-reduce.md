@@ -9,36 +9,39 @@ comments: true
 share: true
 ---
 
-_Map_ and _Reduce_ functions, initially part of functional languages like _Lisp_, later of many others, greatly simplify computations on sequences. Later they inspired a model of distributed computation called _MapReduce_, introduced by Google and made ubiquitous with Apache's [Hadoop MapReduce](https://hadoop.apache.org/docs/stable/hadoop-mapreduce-client/hadoop-mapreduce-client-core/MapReduceTutorial.html) framework. This write-up explores the use of map and reduce functions, how they relate to the MapReduce pattern, and how MapReduce pattern is implemented in different libraries.
+_Map_ and _Reduce_ functions, initially part of functional languages like _Lisp_, later of many others, greatly simplify computations on lists. In this write-up, I explore the following aspects of map and reduce functions:
+- Their definitions, usage, and properties.
+- How they can be used together to model seemingly complex computations, with a real-world application.
+- How they lead to a general-purpose, scalable distributed computation framework, namely _MapReduce_.
 
 {% include toc %}
 
 What are Map and Reduce Functions
 =================================
-Map and reduce functions are convenience functions for simplifying specific list operations, available in all major language libraries. In some languages, they are available as static functions and in others as members of list types. Commonly, both map and reduce functions take a list and a user-defined function as input; <s>map's input function takes one parameter and reduce's</s>; on invocation, both iterates over the list from left to right, and apply the function on each element. Map keeps appending the value returned by the function for each value to a new list, and returns that new list, its length being the same as the input list, at the end (**maps the list** to a new one); reduce, on the other hand, cumulatively keeps updating a single value and returns it at the end (**reduces the list** to a value.) Many list _transformation_ operations can be easily viewed as map operations, and similarly, list _aggregate_ operations (e.g. sum, average, max-min, etc.) can be viewed as reduce operations.
+Map and reduce functions are convenience functions for simplifying specific list operations. They are available in all major language libraries. In some languages, they are available as static functions and in others as members of list types. Commonly, both map and reduce functions take a list and a user-defined function as input; <s>map's input function takes one parameter and reduce's</s>; on invocation, both iterates over the list from left to right, and apply the function on each element. Map keeps appending the value returned by the function for each value to a new list, and returns that new list, its length being the same as the input list, at the end (**maps the list** to a new one); reduce, on the other hand, cumulatively keeps updating a single value and returns it at the end (**reduces the list** to a value.) Many list _transformation_ operations can be easily viewed as map operations, and similarly, list _aggregate_ operations (e.g. sum, average, max-min, etc.) can be viewed as reduce operations.
 
-Here, as a representative, follows how map and reduce functions are implemented in JavaScript. Outside the syntactic differences, other languages implement map and reduce more or less the same way. The following example maps an input array to its squares.
+Here, as a representative, follows how map and reduce functions are implemented in Java. Outside the syntactic differences, other languages implement map and reduce more or less the same way. The following example maps an input array to its squares.
 
-{% highlight javascript linenos %}
-var arr = [1, 2, 3, 4, 5];
+{% highlight java linenos %}
+int[] arr = new int[] { 1, 2, 3, 4, 5 };
 
-var res = arr.map((value, ind, arr) => {
+List<int> res = arr.stream().map((value) -> {
     return value * value;
-});
+}).collect(Collectors.toList());
 
-// output: [ 1, 4, 9, 16, 25 ]
+// res: [ 1, 4, 9, 16, 25 ]
 {% endhighlight %}
 
 The following example reduces an input array to the product of its elements.
 
-{% highlight javascript linenos %}
-var arr = [1, 2, 3, 4];
+{% highlight java linenos %}
+int[] arr = new int[] { 1, 2, 3, 4 };
 
-var res = arr.reduce((pre, cur, arr) => {
+int res = arr.stream().reduce(1, (pre, cur) -> {
     return pre * cur;
 });
 
-// output: 24
+// res: 24
 {% endhighlight %}
 
 **Map-Reduce Input Functions and _Closures_**<br><br>As we have seen, map and reduce takes functions as input. An obvious question arises when the input functions access data (variables) out of their scope. That brings us to _closures_. As I said earlier, map and reduce are concepts imported from functional languages where all data are passed as parameters. Closure itself is a complex idea and deserves separate treatment. You may consult the following references: this stackoverflow [answer](https://stackoverflow.com/a/7464475/615119) for a short introduction and MDN [reference](://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures) for extensive treatment.
