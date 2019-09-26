@@ -15,11 +15,9 @@ _Map_ and _Reduce_ functions, initially part of functional languages like _Lisp_
 
 What are Map and Reduce Functions
 =================================
-Map and reduce library functions are common in all major languages, either as static functions or as members of list types. Commonly, both map and reduce functions take a list and a user-defined function as input; <s>map's input function takes one parameter and reduce's</s>; on invocation, both iterates over the list from left to right, and apply the function on each element. Map keeps appending the value returned by the function for each value to a new list, and returns that new list, its length being the same as the input list, at the end (**maps the list** to a new one); reduce, on the other hand, cumulatively keeps updating a single value and returns it at the end (**reduces the list** to a value.) Many list _transformation_ operations can be easily viewed as map operations, and similarly, list _aggregate_ operations (e.g. sum, average, max-min, etc.) can be viewed as reduce operations.
+Map and reduce functions are convenience functions for simplifying specific list operations, available in all major language libraries. In some languages, they are available as static functions and in others as members of list types. Commonly, both map and reduce functions take a list and a user-defined function as input; <s>map's input function takes one parameter and reduce's</s>; on invocation, both iterates over the list from left to right, and apply the function on each element. Map keeps appending the value returned by the function for each value to a new list, and returns that new list, its length being the same as the input list, at the end (**maps the list** to a new one); reduce, on the other hand, cumulatively keeps updating a single value and returns it at the end (**reduces the list** to a value.) Many list _transformation_ operations can be easily viewed as map operations, and similarly, list _aggregate_ operations (e.g. sum, average, max-min, etc.) can be viewed as reduce operations.
 
-Map and Reduce Functions in JavaScript
-----------
-Map function gets access to current value, current index, and the corresponding array. An additional parameter called `thisArg` is passed to both map and reduce; passing context with `thisArg` helps the functions remain _pure_---that is no access to global data. The following example maps an input array to its squares.
+Here, as a representative, follows how map and reduce functions are implemented in JavaScript. Outside the syntactic differences, other languages implement map and reduce more or less the same way. The following example maps an input array to its squares.
 
 {% highlight javascript linenos %}
 var arr = [1, 2, 3, 4, 5];
@@ -31,7 +29,7 @@ var res = arr.map((value, ind, arr) => {
 // output: [ 1, 4, 9, 16, 25 ]
 {% endhighlight %}
 
-Reduce function has access to the previous value, current value, and the corresponding array. The following example reduces an input array to the product of its elements.
+The following example reduces an input array to the product of its elements.
 
 {% highlight javascript linenos %}
 var arr = [1, 2, 3, 4];
@@ -42,8 +40,6 @@ var res = arr.reduce((pre, cur, arr) => {
 
 // output: 24
 {% endhighlight %}
-
-Outside the syntactic differences, other languages implement map and reduce more or less the same way.
 
 **Map-Reduce Input Functions and _Closures_**<br><br>As we have seen, map and reduce takes functions as input. An obvious question arises when the input functions access data (variables) out of their scope. That brings us to _closures_. As I said earlier, map and reduce are concepts imported from functional languages where all data are passed as parameters. Closure itself is a complex idea and deserves separate treatment. You may consult the following references: this stackoverflow [answer](https://stackoverflow.com/a/7464475/615119) for a short introduction and MDN [reference](://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures) for extensive treatment.
 {: .notice--info}
