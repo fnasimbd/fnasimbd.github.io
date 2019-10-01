@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "Map-Reduce Pattern"
+title: "Introduction to Map-Reduce Pattern"
 modified:
 categories: articles
-excerpt: "Introduction to the _map-reduce_ pattern and its elegant usage."
+excerpt: "Introduction to map and reduce functions, how they lead to _map-reduce pattern_ and its elegant real-world application, namely in _RavenDB_ and _MapReduce_."
 tags: ["map-reduce", "map", "reduce", "distributed-processing", "ravendb", "hadoop", "mapreduce"]
 comments: true
 share: true
@@ -45,9 +45,6 @@ int res = arr.stream().reduce(1, (pre, cur) -> {
 
 // res: 24
 {% endhighlight %}
-
-**Map-Reduce Input Functions and _Closures_**<br><br>As we have seen, map and reduce takes functions as input. An obvious question arises when the input functions access data (variables) out of their scope. That brings us to _closures_. As I said earlier, map and reduce are concepts imported from functional languages where all data are passed as parameters. Closure itself is a complex idea and deserves separate treatment. You may consult the following references: this stackoverflow [answer](https://stackoverflow.com/a/7464475/615119) for a short introduction and MDN [reference](://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures) for extensive treatment.
-{: .notice--info}
 
 Map and reduce together give an elegant abstraction for various computations over collections: it is called **map-reduce pattern**; in this pattern, a task is divided into two phases: **map phase** and **reduce phase**. During the map phase, the **source collection** is mapped to an **intermediate collection** and during the following reduce phase, some final **aggregate result** is computed from the intermediate collection. It may sound bit restrictive but in practice, map-reduce pattern is, in fact, capable of highly versatile computations.
 
@@ -116,9 +113,9 @@ The `AbstractIndexCreationTask` class implements details of index creation hence
 The _MapReduce_ Distributed Computation Model
 =============================================
 
-The RavenDB Map-Reduce Indexing shows how map-reduce pattern enables user to pass a specific computation---indexing---for remote data, stored in server. That capability can be extended for computation in general and for remote data split into multiple chunks. Let's assume that some aggregate result is to be computed for a large chunk of documents---practically intractable for a single computer---and you also have a cluster of computing nodes at your disposal. In these situations, where data size is mammoth and cluster of computers is available, [_MapReduce_](https://static.googleusercontent.com/media/research.google.com/en//archive/mapreduce-osdi04.pdf) framework comes in; as its name suggests, it employs a **model of distributed computation**, exploiting map-reduce pattern.
+The RavenDB Map-Reduce Indexing shows how map-reduce pattern enables user to pass a specific computation---indexing---for remote data, stored in server. That capability can be extended for computations in general and for remote data split into multiple chunks. Let's assume that we have a large chunk of text documents and we want to count occurrence of all words in them---practically intractable for a single computer---and you also have a cluster of computing nodes at your disposal. In these situations, where data size is mammoth and cluster of computers is available, [_MapReduce_](https://static.googleusercontent.com/media/research.google.com/en//archive/mapreduce-osdi04.pdf) framework comes in. It is a model of distributed computation, proposed by Google researchers Jeffrey Dean and Sanjay Ghemawat in 2004.
 
-A typical MapReduce setup consists of a mandatory _master node_ and several _worker nodes_; the master node accepts computation jobs (**MapReduce jobs**) defined by user and orchestrates the job's execution until end. Just like RavenDB Map-Reduce Index, a MapReduce job consists of a user-defined pair of map and reduce functions. <s>Map and reduce functions are slightly modified to make them suitable for distributed processing, and are orchestrated to work together</s>. During map phase, the master node splits the input documents into chunks and assigns each chunk to a worker node for mapping. The map function receives _input key-value pairs_ (e.g. _\<document_001, word_1\>_), where the key identifies the document, and for each input key-value pair, it outputs a set of _intermediate key-value_ pairs (e.g. _\<word_1, 1\>_); those intermediate key-value pairs (e.g. _\<word_1, 1, 1, 1\>_), possibly from different nodes in a cluster, are grouped together by the MapReduce library, and are then forwarded to the reduce function to produce the final _result key-value pairs_ (e.g. _\<word_1, 3\>_). Usually reduce outputs are kept in place and successive MapReduce jobs are run on them to reach some final result. The following pseudocode example <s>from Dean and Ghemawat paper</s> counts the occurrence of each word in a set of documents:
+MapReduce builds on master-worker architecture: one node in the cluster is designated as **master node** and others being **worker nodes** under it. Clients submit computation jobs defined in map-reduce pattern and input data to the master node; master node coordinates the job's execution until its end. Prior to map phase, the master node splits the input documents into chunks, then assigns each chunk to a worker node for mapping in parallel. The map function receives documents and maps them to some intermediate key-value pairs (e.g. _\<word_1, 1\>_); those intermediate key-value pairs (e.g. _\<word_1, 1, 1, 1\>_), possibly from different nodes in a cluster, are grouped together by the MapReduce library, and are then forwarded to the reduce function to produce the final result key-value pairs (e.g. _\<word_1, 3\>_) again in parallel. Usually reduce outputs are kept in place and successive MapReduce jobs are run on them to reach some final result. The following pseudocode example from the originial MapReduce paper counts the occurrence of each word in a set of documents:
 
 {% highlight linenos %}
 map(String key, String value):
@@ -136,7 +133,7 @@ reduce(String key, Iterator values):
     Emit(AsString(result));
 {% endhighlight %}
 
-MapReduce jobs are defined as implementations of some interface defined by the MapReduce library, and are submitted to master node through network; rest of the task (e.g. division, scheduling, storing-retrieving data, error control, etc.) happens within the library. The MapReduce library partitions the map and reduce tasks and assigns them to different cluster nodes to run in parallel; the nodes where map operation executes also contains the data, exploiting locality to improve performance.
+MapReduce jobs are defined as implementations of some interface that may vary from implementation to implementation. Jobs are submitted to master node through network; rest of the tasks (e.g. splitting, scheduling, storing-retrieving data, error control, etc.) are taken care of by the library. The nodes where map operation executes also contains the data, exploiting locality to improve performance.
 
 **Commutativity and Associativity of Reduce and the Resultant Optimization**<br><br>As an optional optimization, where the reduce function is both _commutative_ and _associative_, user can submit a _combiner function_ (usually the reduce function itself) that eliminates duplicates before invoking reduce, thus reducing bandwidth usage; commutativity and assoicativity property ensures that reduce function can be called in any order hence applying reduce function once at the mapping sites, before the actual call, produces the same result.
 {: .notice--info}
