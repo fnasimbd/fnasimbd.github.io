@@ -19,13 +19,14 @@ comments: true
     <meta name="description" content="{{page.description}}" />
 {% endif %}
 
-Configurations are integral to applications that has to deal with user preferences or configurable components. C# .NET offers two standard means of handling configurations. Though the configuration handling features are extendable, the defaults are adequate for the basic needs. Here I review the basic usage of the two configuration methods: first, the `ConfigurationManager.Appsettings` method and then the more advanced `Settings.settings` method.
+Configurations are integral to applications that has to deal with user preferences or configurable components. C# .NET offers two standard means of handling configurations. Though the configuration handling features are rich and extendable, the defaults are adequate for the basic needs. Here I review the basic usage of the two configuration methods.
+
+Both methods use application's configuration file as data source. Both reads the configurations from file on application startup, converts them to CLR types (e.g. `string`, `int`, etc), and serves them with a static property, making them easily accessible from anywhere: `ConfigurationManager.Appsettings`in the first case and the more advanced `Properties.Settings` in the later. I start with `ConfigurationManager.AppSettings`.
 
 The `ConfigurationManager.AppSettings` Property
 ===============================================
 
-The first---and very straightforward---way to store and retrieve your configurations is to add a section called `appSettings` in your project's *App.config* file. By default, C# projects don't have an App.config file; to add one, from Visual Studio add a new *Application Configuration File* item to the project. 
-Here follows a sample App.config file with an `appSettings` section with only one key called `Name` and its value `John Doe`; you may add as many key-values as you want in the `appSettings`.
+The first---and very straightforward---way to store and retrieve your configurations is to add an `appSettings` section to your project's *App.config* file. By default, C# projects don't have an App.config file; to add one, from Visual Studio add a new *Application Configuration File* item to the project. Here follows a sample App.config file with an `appSettings` section with only one key called `Name` and its value `John Doe`; you may add as many key-values as you want in the `appSettings`.
 
 {% highlight xml linenos %}
 <?xml version="1.0" encoding="utf-8" ?>
