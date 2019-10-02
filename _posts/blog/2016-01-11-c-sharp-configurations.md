@@ -91,7 +91,7 @@ The appSettings.config file must have `appSettings` as its root element as follo
 
 It should be obvious from the App.config file examples that appSettings section doesn't store type information of values---not _strongly typed_---; all values are stored and returned as `string`: in case you need non-string values, you have to take care of your own type conversions in program. This is, in fact, the biggest limitation of appSettings section.
 
-The `Settings.settings` Section
+The `Properties.Settings` Property
 ===============================
 
 The other, more advanced, way of handling configurations is by `Settings` class: extension of `System.Configuration.ApplicationSettingsBase`. Here you add one or more `Settings` class to your project, add configurations as strongly typed static properties of that class, and provide default values for configurations in project App.config file. This approach addresses the strong typing limitation of appSettings and it is the recommended way these days.
@@ -116,13 +116,13 @@ Visual Studio has a settings class designer that does most of the settings opera
 </configuration>
 {% endhighlight %}
 
-To access the setting `Name` do the following:
+Each setting is serialized into its string representation (notice the `serializeAs` attribute for each `setting`) in the config file; the following code deserializes the setting `Name` back to its CLR type at run time.
 
 ```csharp
 var name = Properties.Settings.Default.Name;
 ```
 
-Additionally you may also want to have a look at the `Settings.Designer.cs` file to get a feel how this works.
+Additionally, you may also want to have a look at the `Settings.Designer.cs` file to get a feel how this works.
 
 The *Application* and *User* Scopes
 -----------------------------------
