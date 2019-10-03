@@ -26,6 +26,8 @@ Both methods use application's configuration file as data source. Both reads the
 The `ConfigurationManager.AppSettings` Property
 ===============================================
 
+![Add settings]({{'/images/2016-01-11-c-sharp-configuration/1-add-config-file.png'|relative_url}})
+
 The first---and very straightforward---way to store and retrieve your configurations is to add an `appSettings` section to your project's *App.config* file. By default, C# projects don't have an App.config file; to add one, from Visual Studio add a new *Application Configuration File* item to the project. Here follows a sample App.config file with an `appSettings` section with only one key called `Name` and its value `John Doe`; you may add as many key-values as you want in the `appSettings`.
 
 {% highlight xml linenos %}
@@ -96,6 +98,9 @@ The `Properties.Settings` Property
 
 The other, more advanced, way of handling configurations is by `Settings` class: extension of `System.Configuration.ApplicationSettingsBase`. Here you add one or more `Settings` class to your project, add configurations as strongly typed static properties of that class, and provide default values for configurations in project App.config file. This approach addresses the strong typing limitation of appSettings and it is the recommended way these days.
 
+![Add settings]({{'/images/2016-01-11-c-sharp-configuration/3-add-settings-file.png'|relative_url}})
+
+
 Visual Studio has a settings class designer that does most of the settings operations. By default, you don't have any settings class in your project; to add one, open project properties, go to Settings tab; the settings designer opens, add as many settings you want, select type for them, provide default values, and save. As result of your changes, a new element called Settings.settings is added in your project's Properties node and your App.config file changes to something like this:
 
 {% highlight xml linenos %}
@@ -126,6 +131,8 @@ Additionally, you may also want to have a look at the `Settings.Designer.cs` fil
 
 The *Application* and *User* Scopes
 -----------------------------------
+
+![Edit settings values]({{'/images/2016-01-11-c-sharp-configuration/4-edit-settings.png'|relative_url}}){: .align-center}
 
 In settings designer you should have noticed that the settings keys has two choices for scope: *Application* and *User*. They differ in the type of property they result in Settings class.
 
