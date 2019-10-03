@@ -8,7 +8,7 @@ image: images/about-hero-image.jpg
 
 About Me
 ========
-I am a software engineer focusing primarily on _Enterprise Applications_ at a [Bangladesh](https://www.google.com/maps/place/Bangladesh/)-based company. As part of my job, I heavily rely on _Object-Oriented Design (OOD)_, _Domain-Driven Design (DDD)_, and _Test-Driven Development (TDD)_. At times, I enjoy leafing through my copies of _Enterprise Application Architecture_ and _Implementing Domain-Driven Design_ for inspiration.
+I am a software engineer focusing primarily on _Enterprise Applications_ at a [Bangladesh](https://www.google.com/maps/place/Bangladesh/)-based company. As part of my job, I heavily rely on _Object-Oriented Design (OOD)_, _Domain-Driven Design (DDD)_, and _Test-Driven Development (TDD)_. At times, I enjoy leafing through my copies of [_Patterns of Enterprise Application Architecture_](https://www.martinfowler.com/books/eaa.html) and [_Implementing Domain-Driven Design_](http://www.informit.com/store/implementing-domain-driven-design-9780321834577) for inspiration.
 
 I grew up in [Sylhet](https://www.google.com/maps/place/Sylhet/) and now live in [Dhaka](https://www.google.com/maps/place/Dhaka/).
 
