@@ -43,7 +43,7 @@ On build, the App.config file renames to *AssemblyName.OutputType.config* and co
 var name = ConfigurationManager.AppSettings["Name"];
 ```
 
-Note here that accessing a key that doesn't exist in the config file returns `null`; no exception is thrown.
+Note here that accessing a key that doesn't exist in the config file returns `null`, no exception is thrown.
 
 Storing New Configurations During Run Time
 ------------------------------------------
@@ -56,7 +56,7 @@ configFile.AppSettings.Settings.Add("NewName", "Daniel Doe");
 configFile.Save(ConfigurationSaveMode.Modified);
 {% endhighlight %}
 
-At line 1 the configuration file is read into `configFile`; the next line adds a new configuration `NewName` with value `Daniel Doe`. The new configuration is stored immediately in the assembly's config file once the `Save()` method is called in the last line.
+At line 1 the configuration file is read into `configFile`; the next line adds a new configuration `NewName` with value `Daniel Doe`. The new configuration is immediately added to the assembly's config file once the `Save()` method is called in the last line.
 
 Reloading Settings from File in Run Time
 ----------------------------------------
@@ -89,12 +89,15 @@ The appSettings.config file must have `appSettings` as its root element as follo
 </appSettings>
 {% endhighlight %}
 
-It should be obvious from the App.config file examples that appSettings section doesn't store type information of values---not _strongly typed_---; all values are stored and returned as `string`: in case you need non-string values, you have to take care of your own type conversions in program. This is, in fact, the biggest limitation of appSettings section.
+Type Information in `appSettings`
+---------------------------------
+
+It should be obvious from the App.config file examples that `appSettings` section doesn't store type information of values---not _strongly typed_---; all values are stored and returned as `string`: in case you need non-string values, you have to take care of your own type conversions in program. This is, in fact, the biggest limitation of appSettings section.
 
 The `Settings.settings` Section
 ===============================
 
-The other, more advanced, way of handling configurations is by `Settings` class: extension of `System.Configuration.ApplicationSettingsBase`. Here you add one or more `Settings` class to your project, add configurations as strongly typed static properties of that class, and provide default values for configurations in project App.config file. This approach addresses the strong typing limitation of appSettings and it is the recommended way these days.
+The other, more advanced, way of handling configurations is by `Settings` class: extension of `System.Configuration.ApplicationSettingsBase`. Here you add one or more `Settings` class to your project, add configurations as strongly typed static properties of that class, and provide default values for configurations in project App.config file. This approach addresses the strong typing limitation of `appSettings` and it is the recommended way these days.
 
 Visual Studio has a settings class designer that does most of the settings operations. By default, you don't have any settings class in your project; to add one, open project properties, go to Settings tab; the settings designer opens, add as many settings you want, select type for them, provide default values, and save. As result of your changes, a new element called Settings.settings is added in your project's Properties node and your App.config file changes to something like this:
 
