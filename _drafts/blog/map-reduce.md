@@ -191,9 +191,10 @@ public static class InvertedIndexReducer extends Reducer<Text, Text, Text, Text>
 **MapReduce and _Apache Spark_**<br><br>MapReduce got synonymous with Apache MapReduce. It is just one of the many MapReduce implementations: just like Google's original C++-based one (introduced in 2004, by Google's Jeffrey Dean and Sanjay Ghemawat) had been.<br><br>The [Apache Spark](https://spark.apache.org/) framework---de facto replacement of Apache MapReduce---also supports [map](https://spark.apache.org/docs/2.2.0/rdd-programming-guide.html#transformations) and [reduce](https://spark.apache.org/docs/2.2.0/rdd-programming-guide.html#actions) tasks among many others. Spark, however, replaces MapReduce's file system-based, inefficient operations with a more capable data structure called _Resilient Distributed Datasets (RDD)_.
 {: .notice--info}
 
-MapReduce in non-distributed multi-core environment
----------------------------------------------------
-Though MapReduce is mainly suited for large-scale distributed processing, many tasks even in single-node multi-core environment can be simplified with it. Microsoft's _Parallel LINQ_ library supports Map-Reduce processing for multi-core.
+MapReduce in Multi-core, Shared-memory Environment
+--------------------------------------------------
+
+Though MapReduce is popular in large-scale distributed processing, the same model can be employed even in multi-core, shared-memory environment. In this case, multiple threads are employed instead of independent nodes, eliminating need for coordination among nodes and replacing communication over network with fast memory reads, otherwise the model is same as that of MapReduce. Microsoft's _Parallel LINQ (PLINQ)_ library supports Map-Reduce processing on collections with the following method:
 
 {% highlight csharp linenos %}
 public static ParallelQuery<TResult> MapReduce<TSource, TMapped, TKey, TResult>(
@@ -204,6 +205,8 @@ public static ParallelQuery<TResult> MapReduce<TSource, TMapped, TKey, TResult>(
     return source.SelectMany(map).GroupBy(keySelector).SelectMany(reduce);
 }
 {% endhighlight %}
+
+The following snippet counts words in some files in a directory with PLINQ `MapReduce` function.
 
 {% highlight csharp linenos %}
 var files = Directory.EnumerateFiles(dirPath, "*.txt").AsParallel();
