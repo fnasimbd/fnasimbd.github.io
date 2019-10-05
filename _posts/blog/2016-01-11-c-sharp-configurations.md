@@ -19,13 +19,14 @@ comments: true
     <meta name="description" content="{{page.description}}" />
 {% endif %}
 
-Configurations are integral to applications that has to deal with user preferences or configurable components. C# .NET offers two standard means of handling configurations that relieves developers from much of the hassle of implementing configuration handling themselves. Though the configuration handling features are extendable, the defaults are adequate for the basic needs.
+Configurations are integral to applications that has to deal with user preferences or configurable components. C# .NET offers two standard means of handling configurations. They are rich and extendable, however, the defaults are adequate for the basic needs. Here I review the basic usage of the two configuration methods.
 
-The *ConfigurationManager.AppSettings* Property
+Both methods use application's configuration file (App.config) as data source. Both reads the configurations from file on application startup, converts them to CLR types (e.g. `string`, `int`, etc), and serves them with a static property: `ConfigurationManager.Appsettings`in the first case and the more advanced `Properties.Settings` in the later. I start with `ConfigurationManager.AppSettings`.
+
+The `ConfigurationManager.AppSettings` Property
 ===============================================
 
-The first---and very straightforward---way to store and retrieve your configurations is to add a section called *appSettings* in your project's *App.config* file. By default C# projects don't have an App.config file; to add one, from Visual Studio add a new *Application Configuration File* item to the project. 
-Here follows a sample App.config file with an appSettings sction with only one key called *Name*; you may add as many keys as you want in appSettings.
+The first---and very straightforward---way to store and retrieve your configurations is to add an `appSettings` section to your project's App.config file. By default, C# projects don't have an App.config file; to add one, from Visual Studio add a new *Application Configuration File* item to the project. Here follows a sample App.config file with an `appSettings` section with only one key called `Name` and its value `John Doe`; you may add as many key-values as you want in the `appSettings`.
 
 {% highlight xml linenos %}
 <?xml version="1.0" encoding="utf-8" ?>
@@ -36,18 +37,18 @@ Here follows a sample App.config file with an appSettings sction with only one k
 </configuration>
 {% endhighlight %}
 
-On build the App.config file renames to *AssemblyName.OutputType.config* and copies to the project output directory. On application startup, configurations in the appSettings section are read and cached as `NameValueCollection` in `Configuration.AppSettings` property. The following statement accesses the key *Name* from `AppSettings` property:
+On build, the App.config file renames to *AssemblyName.OutputType.config* (e.g. SampleApp.exe.config) and copies to the project output directory. On application startup, configurations in the `appSettings` section are read and cached as `NameValueCollection` in `Configuration.AppSettings` static property. The following statement accesses the key `Name` from the `AppSettings` property:
 
 ```csharp
 var name = ConfigurationManager.AppSettings["Name"];
 ```
 
-Note here that accessing a key that doesn't exist in config file returns null; no exception is thrown.
+Note here that accessing a key that doesn't exist in the config file returns `null`, no exception is thrown.
 
 Storing New Configurations During Run Time
 ------------------------------------------
 
-There are situations where you don't know some configurations upfront; you only get to know them at run time. Following code snippet demonstrates how you add new setting to App.config file in run time.
+Usually, application starts with default values for all of its configurations; user may update the values at run time. However, there are situations where some configurations are not known upfront at all; you only get to know them at run time. Following code snippet demonstrates how to add new setting to App.config file in run time.
 
 {% highlight csharp linenos %}
 var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
@@ -55,9 +56,9 @@ configFile.AppSettings.Settings.Add("NewName", "Daniel Doe");
 configFile.Save(ConfigurationSaveMode.Modified);
 {% endhighlight %}
 
-The changes take effect immediately in the assembly's config file once the `Save()` method is called.
+At line 1 the configuration file is read into `configFile`; the next line adds a new configuration `NewName` with value `Daniel Doe`. The new configuration is immediately added to the assembly's config file once the `Save()` method is called in the last line.
 
-Reloading Settings From File in Run Time
+Reloading Settings from File in Run Time
 ----------------------------------------
 
 After making many changes to the configuration values in run time, you may sometimes need to invalidate the changes and re-read the values from configuration file. Just call the `RefreshSection()` method with parameter `appSettings` as the following statement does.
@@ -66,10 +67,10 @@ After making many changes to the configuration values in run time, you may somet
 ConfigurationManager.RefreshSection("appSettings");
 ```
 
-Moving appSettings to a Separate File
+Moving `appSettings` to a Separate File
 -------------------------------------
 
-Configuration file of applications that use too many configurable components, e.g. dependency injection framework, logger, etc., are often long. If your appSettings section is long, a good option to keep the App.config file cleaner is to put the appSettings in a separate file and putting that file's reference in App.config. Say your appSettings section is stored in file *appSettings.config*, then you may access the settings in that file in the following way:
+Configuration file of applications that use too many configurable components, e.g. dependency injection framework, logger, etc., are often long. If you have a too long `appSettings` section, a good option for keeping the App.config file cleaner is moving the `appSettings` in a separate file and putting that file's reference in App.config. Say your `appSettings` section is moved to file *appSettings.config*, then you may access the settings in that file in the following way:
 
 {% highlight xml linenos %}
 <?xml version="1.0" encoding="utf-8" ?>
@@ -88,14 +89,17 @@ The appSettings.config file must have `appSettings` as its root element as follo
 </appSettings>
 {% endhighlight %}
 
-It should be obvious from the App.config file examples that appSettings section doesn't store type information of values (not *strongly typed* in programming jargon), all values are stored and returned as strings: in case you want to use non-string values, you have to take care of your own type conversions in program. This is, in fact, the biggest limitation of appSettings section.
+Type Information in `appSettings`
+---------------------------------
 
-The *Settings.settings* Section
+It should be obvious from the App.config file examples that `appSettings` section doesn't store type information of values; all values are stored and returned as `string`. In case you need non-string values, you have to take care of your own type conversions. This is, in fact, the biggest limitation of appSettings section.
+
+The `Properties.Settings` Property
 ===============================
 
-The other way of handling configurations is by `Settings` class: extension of `System.Configuration.ApplicationSettingsBase`. Here you add one or more `Settings` class to your project, add configurations as strongly typed static properties of that class, and provide default values for configurations in project App.config file. This approach addresses the strong typing limitation of appSettings and it is the recommended way these days.
+The other, more advanced, way of handling configurations is by `Settings` class: extension of `System.Configuration.ApplicationSettingsBase`. Here you add one or more `Settings` class to your project, add configurations as strongly typed static properties of that class, and provide default values for configurations in project App.config file. This approach addresses the strong typing limitation of `appSettings` and is the recommended way these days.
 
-Visual Studio has a settings class designer that does most of the settings operations. By default you don't have any settings class in your project; to add one, open project properties, go to Settings tab; the settings designer opens, add as many settings you want, select type for them, provide default values, and save. As result of your changes, a new element called Settings.settings is added in your project's Properties node and your App.config file changes to something like this:
+Visual Studio has a settings class designer that does most of the settings operations. By default, you don't have any settings class in your project; to add one, open project properties, go to Settings tab; the settings designer opens, add as many settings you want, select type for them, provide default values, and save. As result of your changes, a new element called Settings.settings is added in your project's Properties node and your App.config file changes to something like this:
 
 {% highlight xml linenos %}
 <?xml version="1.0" encoding="utf-8" ?>
@@ -115,21 +119,23 @@ Visual Studio has a settings class designer that does most of the settings opera
 </configuration>
 {% endhighlight %}
 
-To access the setting `Name` do the following:
+Each setting is serialized into string (notice the `serializeAs` attribute for each `setting`) in the config file. The following code deserializes the setting `Name` back to its CLR type at run time.
 
 ```csharp
 var name = Properties.Settings.Default.Name;
 ```
 
-Additionally you may also want to have a look at the `Settings.Designer.cs` file to get a feel how this works.
+Additionally, you may also want to have a look at the `Settings.Designer.cs` file to get a feel how this works.
 
 The *Application* and *User* Scopes
 -----------------------------------
 
-In settings designer you should have noticed that the settings keys has two choices for scope: *Application* and *User*. They differ in the type of property they result in Settings class.
+![Edit settings values]({{'/images/2016-01-11-c-sharp-configuration/4-edit-settings.png'|relative_url}}){: .align-center}
 
-- The *Application-scoped* settings are get only properties; stores system-level information that are not likely to change at run time. Default values for application-scoped configurations reside in *applicationSettings* section in App.config file.
-- The *User-scoped* settings are get and set properties; intended to store user preferences that are likely to change at run time. User-scoped configuratios have their default values in *userSettings* section in App.config file.
+In settings designer you should have noticed that the settings keys has two choices for scope: *Application* and *User*. They differ in the type of property they result in `Settings` class.
+
+- The *application-scoped* settings are get only properties, stores system-level information that are not likely to change at run time. Default values for application-scoped configurations reside in `applicationSettings` section in App.config file.
+- The *user-scoped* settings are get and set properties, intended to store user preferences that are likely to change at run time. User-scoped configuratios have their default values in `userSettings` section in App.config file.
 
 Updating and Saving User-Scoped Application Settings in Run Time
 ----------------------------------------------------------------
@@ -167,4 +173,5 @@ Updates
 
 - **January 28, 2016:** Renamed section "*The* applicationSettings *and* userSettings *Sections*" to "*The* Application *and* User *Scopes*" and updated content within the section.
 - **September 30, 2019:** Copy editing, section header and code highlighting styles.
+- **October 5, 2019:** Edited for improved clarity.
 
