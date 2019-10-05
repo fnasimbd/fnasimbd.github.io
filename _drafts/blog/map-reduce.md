@@ -120,23 +120,7 @@ The RavenDB Map-Reduce Indexing shows how map-reduce pattern enables user to pas
 
 MapReduce builds on master-worker architecture: one node in the cluster is designated as **master node** and others being **worker nodes** under it. Clients submit computation jobs defined in map-reduce pattern and input data to the master node; master node coordinates the job's execution until its end. Prior to map phase, the master node splits the input documents into chunks, then assigns each chunk to a worker node for mapping in parallel. In a mapper node, the map function receives documents, iterates through their contents, and maps them to suitable intermediate key-value pairs. Once a worker node finishes mapping, master node forwards the intermediate outputs to a worker node for reducing. Before reducing, intermediate outputs are grouped together by their keys, then reduce function reduces each group to the final result key-value pairs again in parallel. Usually reduce outputs are kept in place and successive MapReduce jobs are run on them to reach some final result.
 
-For our word counting example, map function would iterate over the tokenized words in a document and for each word, produce a $$\langle word, 1 \rangle$$ pair, meaning one occurrence of $$word$$ is found. Before reduction, the intermediate output pairs would be grouped by $$word$$. Reduce function would add up all 1's for a word (e.g. $$\langle word_1, 1,1,1 \rangle$$) hence producing that word's total occurrence (e.g. $$\langle word_1, 3 \rangle$$) The following pseudocode example from the originial MapReduce paper counts the occurrence of each word in a set of documents:
-
-{% highlight linenos %}
-map(String key, String value):
-    // key: document name
-    // value: document contents
-    for each word w in value:
-        EmitIntermediate(w, "1");
-
-reduce(String key, Iterator values):
-    // key: a word
-    // values: a list of counts
-    int result = 0;
-    for each v in values:
-        result += ParseInt(v);
-    Emit(AsString(result));
-{% endhighlight %}
+For our word counting example, map function would iterate over the tokenized words in a document and for each word, produce a $$\langle word, 1 \rangle$$ pair, meaning one occurrence of $$word$$ is found. Before reduction, the intermediate output pairs would be grouped by $$word$$. Reduce function would add up all 1's for a word (e.g. $$\langle word_1, 1,1,1 \rangle$$) hence producing that word's total occurrence (e.g. $$\langle word_1, 3 \rangle$$). Compare the process with that of creating Map-Reduce Index in RavenDB for similarity.
 
 MapReduce jobs are defined as implementations of some interface that may vary from implementation to implementation. Jobs are submitted to master node through network; rest of the tasks (e.g. splitting, scheduling, storing-retrieving data, error control, etc.) are taken care of by the library. The nodes where map operation executes also contains the data, exploiting locality to improve performance.
 
@@ -191,7 +175,7 @@ public static class InvertedIndexReducer extends Reducer<Text, Text, Text, Text>
 **MapReduce and _Apache Spark_**<br><br>MapReduce got synonymous with Apache MapReduce. It is just one of the many MapReduce implementations: just like Google's original C++-based one (introduced in 2004, by Google's Jeffrey Dean and Sanjay Ghemawat) had been.<br><br>The [Apache Spark](https://spark.apache.org/) framework---de facto replacement of Apache MapReduce---also supports [map](https://spark.apache.org/docs/2.2.0/rdd-programming-guide.html#transformations) and [reduce](https://spark.apache.org/docs/2.2.0/rdd-programming-guide.html#actions) tasks among many others. Spark, however, replaces MapReduce's file system-based, inefficient operations with a more capable data structure called _Resilient Distributed Datasets (RDD)_.
 {: .notice--info}
 
-MapReduce in Multi-core, Shared-memory Environment
+MapReduce in Multi-Core, Shared-Memory Environment
 --------------------------------------------------
 
 Though MapReduce is popular in large-scale distributed processing, the same model can be employed even in multi-core, shared-memory environment. In this case, multiple threads are employed instead of independent nodes, eliminating need for coordination among nodes and replacing communication over network with fast memory reads, otherwise the model is same as that of MapReduce. Microsoft's _Parallel LINQ (PLINQ)_ library supports Map-Reduce processing on collections with the following method:
