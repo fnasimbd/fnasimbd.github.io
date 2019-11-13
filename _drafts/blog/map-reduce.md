@@ -119,7 +119,7 @@ The _MapReduce_ Distributed Computation Model
 
 The RavenDB Map-Reduce Indexing shows how map-reduce pattern enables user to pass a specific computation---indexing---for remote data, stored in server. That capability can be extended for computations in general and for remote data split into multiple partitions. Let's assume that we have a large chunk of text documents and we want to count occurrence of all words in them---practically intractable for a single computer---and you also have a cluster of computing nodes at your disposal. In these situations, where data size is mammoth and cluster of computers is available, [_MapReduce_](https://static.googleusercontent.com/media/research.google.com/en//archive/mapreduce-osdi04.pdf) framework comes in. It is a model of distributed computation, proposed by Google researchers Jeffrey Dean and Sanjay Ghemawat in 2004.
 
-MapReduce builds on master-worker architecture: one node in the cluster is designated as **master node** and others being **worker nodes** under it. Clients submit computation jobs defined in map-reduce pattern and input data to the master node; master node coordinates the job's execution until its end. Prior to map phase, the master node splits the input documents into partitions, then assigns each partition to a worker node for mapping in parallel. In a mapper node, the map function receives documents, iterates through their contents, and maps them to suitable intermediate key-value pairs. Once a worker node finishes mapping, master node forwards the intermediate outputs to a worker node for reducing. Before reducing, intermediate outputs are grouped together by their keys, then reduce function reduces each group to the final result key-value pairs again in parallel. Usually reduce outputs are kept in place and successive MapReduce jobs are run on them to reach some final result.
+MapReduce builds on master-worker architecture: one node in the cluster is designated as **master node** and others being **worker nodes** under it. <s>Clients submit computation jobs defined in map-reduce pattern and input data to the master node</s>; master node coordinates the job's execution until its end. Prior to map phase, <s>the master node splits the input documents</s> into partitions, then assigns each partition to a worker node for mapping in parallel. In a mapper node, the map function receives documents, iterates through their contents, maps them to suitable intermediate key-value result pairs, and writes the result pairs in the mapper node's local disk. Once a worker node finishes mapping, master node forwards locations of the intermediate outputs to a worker node for reducing. Before reducing, intermediate outputs are grouped together by their keys, then reduce function reduces each group to the final result key-value pairs again in parallel. Usually reduce outputs are kept in place and successive MapReduce jobs are run on them to reach some final result.
 
 For our word counting example, map function would iterate over the tokenized words in a document and for each word, produce a $$\langle word, 1 \rangle$$ pair, meaning one occurrence of $$word$$ is found. Before reduction, the intermediate output pairs would be grouped by $$word$$. Reduce function would add up all 1's for a word (e.g. $$\langle word_1, 1,1,1 \rangle$$) hence producing that word's total occurrence (e.g. $$\langle word_1, 3 \rangle$$). Compare the process with that of creating Map-Reduce Index in RavenDB for similarity.
 
@@ -131,55 +131,50 @@ MapReduce jobs are defined as implementations of some interface that may vary fr
 MapReduce in _Apache Hadoop_
 -------------------------------------
 
-Apache Hadoop is an open-source ecosystem providing infrastructure for distributed storage and computation (e.g. its distributed file system HDFS). Hadoop's MapReduce, targeted for JVM platform, is perhaps the most popular implementation of MapReduce. It provides user with interfaces to submit their map and reduce functions written in Java and packaged as JARs, concurrency safe data structures to store the computation results. As a motivation, the following snippet, written in MapReduce's Java API (it has APIs for other languages too,) shows how the map and reduce functions for a job that computes inverted index of words in documents may look like.
+Apache Hadoop is an open-source ecosystem providing infrastructure for distributed storage and computation (e.g. its distributed file system HDFS). Hadoop's MapReduce, targeted for JVM platform, is perhaps the most popular implementation of MapReduce. It provides user with interfaces to submit their map and reduce functions written in Java and packaged as JARs, concurrency safe data structures to store the computation results. As a motivation, the following snippet, written in MapReduce's Java API (it has APIs for other languages too), shows how the map and reduce functions for a job that counts the occurrence of words in documents may look like.
 
 {% highlight java linenos %}
-public static class InvertedIndexMapper extends Mapper<LongWritable, Text, Text, Text> {
-    private final Text document = new Text();
+public static class TokenizerMapper extends Mapper<Object, Text, Text, IntWritable> {
+    private final static IntWritable one = new IntWritable(1);
     private Text word = new Text();
 
-    public void map(LongWritable key, Text value, Context context)
+    public void map(Object key, Text value, Context context)
             throws IOException, InterruptedException {
-        String documentName = ((FileSplit) context.getInputSplit()).getPath().getName();
-        document.set(documentName);
-
         StringTokenizer itr = new StringTokenizer(value.toString());
 
         while (itr.hasMoreTokens()) {
             word.set(itr.nextToken());
-            context.write(word, document);
+            context.write(word, one);
         }
     }
 }
 
-public static class InvertedIndexReducer extends Reducer<Text, Text, Text, Text> {
-    public void reduce(Text key, Iterable<Text> values, Context context)
+public static class IntSumReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
+    private IntWritable result = new IntWritable();
+
+    public void reduce(Text key, Iterable<IntWritable> values, Context context)
             throws IOException, InterruptedException {
-        StringBuffer buffer = new StringBuffer();
+        int sum = 0;
 
-        for (Text val : values) {
-            if (buffer.length() != 0) {
-                buffer.append(" ");
-            }
-
-            buffer.append(val.toString());
+        for (IntWritable val : values) {
+            sum += val.get();
         }
 
-        Text documentList = new Text();
-        documentList.set(buffer.toString());
-
-        context.write(key, documentList);
+        result.set(sum);
+        context.write(key, result);
     }
 }
 {% endhighlight %}
 
-**MapReduce and _Apache Spark_**<br><br>MapReduce got synonymous with Apache MapReduce, which is just one of the many MapReduce implementations: just like Google's original C++-based one had been.<br><br>The [Apache Spark](https://spark.apache.org/) framework---de facto replacement of Apache MapReduce---also supports [map](https://spark.apache.org/docs/2.2.0/rdd-programming-guide.html#transformations) and [reduce](https://spark.apache.org/docs/2.2.0/rdd-programming-guide.html#actions) tasks among many others. Spark, however, replaces MapReduce's file system-based, inefficient I/O operations with a more capable data structure called _Resilient Distributed Datasets (RDD)_.
+As parameters, the `map` function receives a document name as `key` and its content as `value`; it tokenizes the document's content into words, iterates over the words, and writes `one` for each word. The `reduce` function, on the other hand, receives a word as `key` and list of all its counts, produced by map, as `values`; it sums up all the counts (`ones`) and writes them out.
+
+**MapReduce and _Apache Spark_**<br><br>MapReduce got synonymous with Apache MapReduce, which is just one of the many MapReduce implementations: just like Google's original C++-based one had been.<br><br>The more recent [Apache Spark](https://spark.apache.org/) framework for distributed processing also supports [map](https://spark.apache.org/docs/2.2.0/rdd-programming-guide.html#transformations) and [reduce](https://spark.apache.org/docs/2.2.0/rdd-programming-guide.html#actions) tasks among many others. Spark, however, replaces MapReduce's file system-based, inefficient I/O operations with a more capable data structure called _Resilient Distributed Datasets (RDD)_.
 {: .notice--info}
 
 MapReduce in Multi-Core, Shared-Memory Environment
 --------------------------------------------------
 
-Though MapReduce is targeted for large-scale distributed data processing, the same model can be employed even in multi-core, shared-memory environment. In this case, multiple threads are employed instead of multiple independent map-reduce nodes, thereby eliminating need for coordination among nodes and replacing communication over network with faster memory read-writes. .NET Framework's _Parallel LINQ (PLINQ)_ library provides parallel equivalents to LINQ methods for processing collections; user may write their own custom MapReduce extension method like the following on top of them:
+Though MapReduce is targeted for large-scale distributed data processing, the same model can be employed even in multi-core, shared-memory environment. In this case, multiple threads are employed instead of multiple independent map-reduce nodes, thereby eliminating need for coordination among nodes and replacing communication over network with faster memory read-writes. .NET Framework's [_Parallel LINQ (PLINQ)_](https://docs.microsoft.com/en-us/dotnet/standard/parallel-programming/parallel-linq-plinq) library provides parallel equivalents to LINQ methods for processing collections; user may write their own custom MapReduce extension method like the following on top of them:
 
 {% highlight csharp linenos %}
 public static ParallelQuery<TResult> MapReduce<TSource, TMapped, TKey, TResult>(
@@ -201,8 +196,3 @@ var counts = files.MapReduce(
     group => new[] { new KeyValuePair<string, int>(group.Key, group.Count()) });
 {% endhighlight %}
 
-References
-----------
-1. [A reference](https://courses.cs.washington.edu/courses/cse454/05au/slides/08-map-reduce.pdf).
-2. [Another reference](https://lintool.github.io/MapReduceAlgorithms/MapReduce-book-final.pdf).
-3. [Aggregating with Apache Spark](https://www.javaworld.com/article/3184109/aggregating-with-apache-spark.html)
