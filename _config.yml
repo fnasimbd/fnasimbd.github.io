@@ -77,7 +77,7 @@ plugins:
 
 # Collections
 collections:
-  recipes:
+  cqrs_es:
     output: true
     permalink: /:collection/:path/
 
@@ -93,8 +93,8 @@ defaults:
       share: true
   # Recipe defaults
   - scope:
-      path: "_recipes"
-      type: recipes
+      path: "_cqrs_es"
+      type: cqrs_es
     values:
       layout: post
       comments: true

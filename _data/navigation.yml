@@ -9,6 +9,9 @@
 - title: Blogs
   url: /blog/
 
+- title: CQRS+ES
+  url: /cqrs_es/
+
 - title: Search
   url: /search/
 
