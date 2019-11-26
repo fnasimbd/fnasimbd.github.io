@@ -8,7 +8,7 @@ comments: true
 share: true
 ---
 
-Event Sourcing is becoming increasingly popular, mainly among the DDD community. Understanding and implementing an event store can be a suitable first step towards adopting CQRS and Event Sourcing.
+Event Sourcing and CQRS are becoming increasingly popular, mainly among the DDD community. Understanding and implementing an event store can be a suitable first step towards adopting CQRS and Event Sourcing.
 
 * Purpose and characteristics of an event store.
 * How to implement an event store in Java with EventStore.
@@ -18,7 +18,7 @@ Event Sourcing is becoming increasingly popular, mainly among the DDD community.
 Quick Recap of CQRS and Event Sourcing
 ======================================
 
-Event Sourcing is essentially about domain events. Instead of domain model's current state, the entire sequence of events leading to the current state is preserved.
+Event Sourcing is a departure from the traditional approach of storing and retrieving domain model state. Instead of storing domain model's current state, the entire sequence of events leading to the current state is preserved and whenever needed, currrent state is reconstructed from the events.
 
 CQRS divides the application into two sides: the **write model** and the **read model**. Only write models can update the domain model. For each write requests, current state of a domain model is reconstructed by **replaying** all events pertaining to that domain model instance. Read models subscribe to an event stream. With each domain event, interested read models update themselves and store the state in a secondary store (aka **projection**) for serving on user's read requests.
 
@@ -27,9 +27,9 @@ A convenient way for storing and retrieving events is necessary. That is where _
 Events and the Event Store
 ==========================
 
-An event store stores events as serialized BLOBs and their type (in order to facilitate deserializing) with an event id. Events in a event store can be queried only with event ids. Event stores are not designed for complex querying.
+An event store stores domain events as serialized BLOBs with an unique event id. Events in a event store can be queried only with event ids. Event stores are not designed for complex querying.
 
-Events are stored as the following `StoredEvent` type (omitted details for brevity; follow this link for full implementation). The `typeName` field contains the fully qualified type name of the event to facilitate deserializing.
+An application usually contains many different domain events. Before storing in an event store, however, for convenience, all domain events are converted to something like the following `StoredEvent` type. The `eventBody` contains the serialized domain event and the `typeName` field contains the fully qualified type name of the event to facilitate deserializing during read.
 
 {% highlight java linenos %}
 public class StoredEvent {
