@@ -1,6 +1,6 @@
 {
-    "name": "Jekyll Test",
-    "image": "etelej/jekyll:latest",
+    "name": "Jekyll Dev",
+    "image": "jekyll/jekyll:3.8.5",
     "appPort": 4000,
     "runArgs": ["-e", "TZ=Asia/Dhaka"],
     "extensions": [
