@@ -20,9 +20,9 @@ Quick Recap of CQRS and Event Sourcing
 
 Event Sourcing is a departure from the traditional approach of storing and retrieving domain model state. Instead of storing domain model's current state, the entire sequence of events leading to the current state is preserved and whenever needed, currrent state is reconstructed from the events.
 
-CQRS divides the application into two sides: the **write model** and the **read model**. Only write models can update the domain model. For each write requests, current state of a domain model is reconstructed by **replaying** all events pertaining to that domain model instance. Read models subscribe to an event stream. With each domain event, interested read models update themselves and store the state in a secondary store (aka **projection**) for serving on user's read requests.
+CQRS divides the application into two sides: the **write model** and the **read model**. Only write models can update the domain model. For each write requests, current state of a domain model is reconstructed by **replaying** all events pertaining to that domain model instance and the desired change is appended as a new event. Read models subscribe to the event stream corresponding to the domain model. With each domain event, interested read models update themselves and store the state in a secondary store (aka **projection**) for serving on user's read requests.
 
-A convenient way for storing and retrieving events is necessary. That is where _event store_ comes in.
+A convenient way for storing and retrieving events is warranted. That is where _event store_ comes in.
 
 Events and the Event Store
 ==========================
@@ -43,14 +43,12 @@ public class StoredEvent {
 }
 {% endhighlight %}
 
-An event store interface follows the following basic format.
+An event store interface supports the following basic operations.
 
 {% highlight java linenos %}
 public interface EventStore {
 
     public void appendWith(EventStreamId aStartingIdentity, List<DomainEvent> anEvents);
-
-    public void close();
 
     public List<DispatchableDomainEvent> eventsSince(long aLastReceivedEvent);
 
@@ -58,16 +56,14 @@ public interface EventStore {
 
     public EventStream fullEventStreamFor(EventStreamId anIdentity);
 
-    public void purge(); // mainly used for testing
-
     public void registerEventNotifiable(EventNotifiable anEventNotifiable);
 }
 {% endhighlight %}
 
-Vaughn Vernon implements event store in MySQL and that is sufficient for basic usage. That approach has several limitations for practical use.
-
 _EventStore_ as an Event Store
 ==============================
+
+Vaughn Vernon implements event store in MySQL and that is sufficient for basic usage. That approach has several limitations for practical use.
 
 EventStore---confusing namesake---is a battle-tested _append-only_ log of _immutable events_, purpose-built for event sourcing, designed by a team lead by long-time CQRS proponent Greg Young. EventStore is written in C#, with .NET and JVM client wrappers for its REST API. I will be using the JVM one.
 
