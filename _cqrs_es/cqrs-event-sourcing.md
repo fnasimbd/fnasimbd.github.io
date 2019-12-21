@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "CQRS+ES: How to Implement an Event Store with EventStore"
+title: "CQRS+ES: EventStore as Event Store"
 modified:
 excerpt: "Introduction to implementing an Event Sourcing event store with [EventStore](https://eventstore.org)."
 tags: ["event-sourcing", "cqrs", "eventstore"]
@@ -22,14 +22,14 @@ Event Sourcing is a departure from the traditional approach of storing and retri
 
 CQRS divides the application into two sides: the **write model** and the **read model**. Only write models can update the domain model. For each write requests, current state of a domain model is reconstructed by **replaying** all events pertaining to that domain model instance and the desired change is appended as a new event. Read models subscribe to the event stream corresponding to the domain model. With each domain event, interested read models update themselves and store the state in a secondary store (aka **projection**) for serving on user's read requests.
 
-A convenient way for storing and retrieving events is warranted. That is where _event store_ comes in.
+A convenient way for storing and retrieving events is warranted. That is where **event store** comes in.
 
 Events and the Event Store
 ==========================
 
-An event store stores domain events as serialized BLOBs with an unique event id. Events in a event store can be queried only with event ids. Event stores are not designed for complex querying.
+An event store stores domain events as serialized BLOBs with an unique event id. Events in a event store can be queried only with event ids. 
 
-An application usually contains many different domain events. Before storing in an event store, however, for convenience, all domain events are converted to something like the following `StoredEvent` type. The `eventBody` contains the serialized domain event and the `typeName` field contains the fully qualified type name of the event to facilitate deserializing during read.
+An application usually consists of many different domain events. Before storing in an event store, however, for convenience, all domain events are converted to something like the following `StoredEvent` type. The `eventBody` contains the serialized domain event and the `typeName` field contains the fully qualified type name of the event to facilitate deserializing during read.
 
 {% highlight java linenos %}
 public class StoredEvent {
@@ -48,22 +48,25 @@ An event store interface supports the following basic operations.
 {% highlight java linenos %}
 public interface EventStore {
 
-    public void appendWith(EventStreamId aStartingIdentity, List<DomainEvent> anEvents);
+    void appendWith(EventStreamId aStartingIdentity, List<DomainEvent> anEvents);
 
-    public List<DispatchableDomainEvent> eventsSince(long aLastReceivedEvent);
+    List<DispatchableDomainEvent> eventsSince(long aLastReceivedEvent);
 
-    public EventStream eventStreamSince(EventStreamId anIdentity);
+    EventStream eventStreamSince(EventStreamId anIdentity);
 
-    public EventStream fullEventStreamFor(EventStreamId anIdentity);
+    EventStream fullEventStreamFor(EventStreamId anIdentity);
 
-    public void registerEventNotifiable(EventNotifiable anEventNotifiable);
+    void registerEventNotifiable(EventNotifiable anEventNotifiable);
 }
 {% endhighlight %}
+
+**Event Stream and Querying**<br><br>Event stores are not designed for complex querying. Stream projections are there to support that.
+{: .notice--info}
 
 _EventStore_ as an Event Store
 ==============================
 
-Vaughn Vernon implements event store in MySQL and that is sufficient for basic usage. That approach has several limitations for practical use.
+<s>Vaughn Vernon implements event store in MySQL and that is sufficient for basic usage. That approach has several limitations for practical use.</s>
 
 EventStore---confusing namesake---is a battle-tested _append-only_ log of _immutable events_, purpose-built for event sourcing, designed by a team lead by long-time CQRS proponent Greg Young. EventStore is written in C#, with .NET and JVM client wrappers for its REST API. I will be using the JVM one.
 
@@ -88,19 +91,9 @@ var settings = new SettingsBuilder()
 connection = EsConnectionFactory.create(system, settings);
 {% endhighlight %}
 
-Writing Events
---------------
+An EventStore connection is usually established on application startup. Unlike a relational database connection, an EventStore connection is meant to be open for the entire application lifecycle.
 
-{% highlight java linenos %}
-Collection<EventData> writeEvents = new ArrayList<>();
-
-for (var event : anEvents) {
-    var eventData = createEventData(aStartingIdentity, event);
-    writeEvents.add(eventData);
-}
-
-connection.writeEvents(aStartingIdentity.streamName(), null, writeEvents, credentials());
-{% endhighlight %}
+Once a connection is made, an Event Sourced application's write model starts by reading an aggregate root and then appending new events to it if necessary.
 
 Reading Events
 --------------
@@ -137,12 +130,23 @@ for (var event : events) {
 }
 {% endhighlight %}
 
+Writing Events
+--------------
+
+{% highlight java linenos %}
+Collection<EventData> writeEvents = new ArrayList<>();
+
+for (var event : anEvents) {
+    var eventData = createEventData(aStartingIdentity, event);
+    writeEvents.add(eventData);
+}
+
+connection.writeEvents(aStartingIdentity.streamName(), null, writeEvents, credentials());
+{% endhighlight %}
+
 Subscribing to Domain Events
 ----------------------------
 
 For a single event stream, it is simple; because stream is consistent after each transaction.
 
 In EventStore, we have to subscribe to the changes taking place in a projection.
-
-**Commutativity and Associativity of Reduce and the Resultant Optimization**<br><br>As an optional optimization, where the reduce function is both _commutative_ and _associative_, user can submit a _combiner function_ (usually the reduce function itself) that eliminates duplicates before invoking reduce, thus reducing bandwidth usage.
-{: .notice--info}
