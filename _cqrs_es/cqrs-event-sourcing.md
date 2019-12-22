@@ -60,7 +60,7 @@ public interface EventStore {
 }
 {% endhighlight %}
 
-**Event Stream and Querying**<br><br>Event stores are not designed for complex querying. Stream projections are there to support that.
+**Event Stream and Querying**<br><br>Notice that none of the `EventStore` interface methods implement any complex parameterized queries. Event stores are not designed for complex querying. They are meant to serve the write or command side of a CQRS application.<br><br>Stream projections are there to support that.
 {: .notice--info}
 
 _EventStore_ as an Event Store
@@ -91,12 +91,14 @@ var settings = new SettingsBuilder()
 connection = EsConnectionFactory.create(system, settings);
 {% endhighlight %}
 
-An EventStore connection is usually established on application startup. Unlike a relational database connection, an EventStore connection is meant to be open for the entire application lifecycle.
+A CQRS+ES application usually establishes an EventStore connection on application startup and unlike a relational database connection, retains the connection for the entire application lifecycle.
 
-Once a connection is made, an Event Sourced application's write model starts by reading an aggregate root and then appending new events to it if necessary.
+With the event store connection established, application is ready to serve user requests. For a command request, event-sourced application's write model starts by reading an aggregate root and then appending new events to it if necessary.
 
 Reading Events
 --------------
+
+The following snippet shows how to read events from an event stream asynchronously.
 
 {% highlight java linenos %}
 Future<ReadStreamEventsCompleted> res = connection.readStreamEventsForward(
@@ -111,6 +113,8 @@ List<DispatchableDomainEvent> dispatchableEvents = new ArrayList<>();
 ReadStreamEventsCompleted r = Await.result(res, Duration.create(10, TimeUnit.SECONDS));
 var events = r.eventsJava();
 {% endhighlight %}
+
+Once events are read, they must be deserialized to Java classes.
 
 {% highlight java linenos %}
 for (var event : events) {
@@ -143,6 +147,9 @@ for (var event : anEvents) {
 
 connection.writeEvents(aStartingIdentity.streamName(), null, writeEvents, credentials());
 {% endhighlight %}
+
+**Event Stream Strategy**<br><br>A carefully defined event stream strategy is important for an event-sourced application. It decides whether there should be one stream per application, per aggregate, per aggregate id, etc. This decision depends on a number of factors.
+{: .notice--info}
 
 Subscribing to Domain Events
 ----------------------------
