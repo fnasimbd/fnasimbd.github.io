@@ -80,6 +80,8 @@ The EventStore JVM client is actor-based.
 Connecting to EventStore
 ------------------------
 
+A CQRS+ES application usually establishes an EventStore connection on application startup and unlike a relational database connection, retains the connection for the entire application lifecycle.
+
 {% highlight java linenos %}
 var credentials = new UserCredentials("admin", "changeit");
 var system = ActorSystem.create();
@@ -91,24 +93,24 @@ var settings = new SettingsBuilder()
 connection = EsConnectionFactory.create(system, settings);
 {% endhighlight %}
 
-A CQRS+ES application usually establishes an EventStore connection on application startup and unlike a relational database connection, retains the connection for the entire application lifecycle.
-
 With the event store connection established, application is ready to serve user requests. For a command request, event-sourced application's write model starts by reading an aggregate root and then appending new events to it if necessary.
 
 Reading Events
 --------------
 
-The following snippet shows how to read events from an event stream asynchronously.
+The following snippet shows how to read events from an event stream asynchronously. Client has to specify the stream name, offset to start reading events from, and number of events to be read.
 
 {% highlight java linenos %}
+var streamName = "sample_stream";
+var readOffset = 0;
+var eventsCount = 100;
+
 Future<ReadStreamEventsCompleted> res = connection.readStreamEventsForward(
-                    streamIdentity.streamName(),
-                    new EventNumber.Exact(startEventNumber),
-                    100,
+                    streamName,
+                    new EventNumber.Exact(readOffset),
+                    eventsCount,
                     true,
                     credentials());
-
-List<DispatchableDomainEvent> dispatchableEvents = new ArrayList<>();
 
 ReadStreamEventsCompleted r = Await.result(res, Duration.create(10, TimeUnit.SECONDS));
 var events = r.eventsJava();
@@ -127,10 +129,6 @@ for (var event : events) {
 
     var eventDeserialized = this.eventSerializer().
             deserialize(storedEvent.eventBody(), eventClass);
-
-//    dispatchableEvents.add(
-//            new DispatchableDomainEvent(event.record().number().value(),
-//                    eventDeserialized));
 }
 {% endhighlight %}
 
@@ -154,6 +152,27 @@ connection.writeEvents(aStartingIdentity.streamName(), null, writeEvents, creden
 Subscribing to Domain Events
 ----------------------------
 
-For a single event stream, it is simple; because stream is consistent after each transaction.
+Event-sourced applications' read model/query model is dependent on domain events. Read model projection updates itself on each domain event. For a single event stream, it is simple; because stream is consistent after each transaction.
 
-In EventStore, we have to subscribe to the changes taking place in a projection.
+EventStore provides API for subscribing to the changes taking place in a projection. Subscription depends on event stream strategy.
+
+{% highlight java linenos %}
+connection.subscribeToStream("$et-title", new SubscriptionObserver<Event>() {
+    @Override
+    public void onLiveProcessingStart(Closeable subscription) {
+    }
+
+    @Override
+    public void onEvent(Event event, Closeable subscription) {
+        notifyDispatchableEvents();
+    }
+
+    @Override
+    public void onError(Throwable e) {
+    }
+
+    @Override
+    public void onClose() {
+    }
+}, false, credentials());
+{% endhighlight %}
