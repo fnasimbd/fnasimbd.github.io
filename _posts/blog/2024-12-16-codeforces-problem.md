@@ -98,7 +98,16 @@ Given that each element can be either at the beginning or at the end, there are 
 
 ## Finding the $$k$$-th permutation
 
-Then comes the question of how to sort them lexicographically?
+Then comes the question of how to sort them lexicographically.
+
+| Permutation | Binary Encoding | Explanation
+|-------------|-----------------|-------------
+| `[1, 2, 3]` | `0 0 0` | All elements remain in their positions.
+| `[1, 3, 2]` | `0 1 0` | The second element in the subarrary `[2, 3]` moved to the end.
+| `[2, 3, 1]` | `1 0 0` | Only the first element moved to the end; remaining subarray `[2, 3]` remains the same.
+| `[3, 2, 1]` | `1 1 0` | Both the first and second elements moved to the end.
+
+The ordering can be encoded as a binary string of length $$n-1$$. Each set bit indicates that the element at that position is to be moved to the end.
 
 ```
 [1, 2, 3, 4]
@@ -110,10 +119,6 @@ Then comes the question of how to sort them lexicographically?
 [3, 4, 2, 1]
 [4, 3, 2, 1]
 ```
-
-It has a correlation with the binary representation of $$k$$. The binary representation, in turn, gives a lexicographic ordering.
-
-The algorithm is for each set bit move the current element to the last.
 
 ## Caveats
 
