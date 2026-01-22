@@ -25,29 +25,12 @@ For a given $$n$$, the problem asks to _find the $$k$$-th permutation in lexicog
 
 The first task is to identify the permutations that yield the maximum value of $$S(p)$$. Let's observe the case for $$n = 3$$.
 
-$$
-[1], [1, 2], [1, 2, 3] = 1 + 1 + 1\\
-[2], [2, 3] = 2 + 2
-[3] = 3
-$$
-
-```
-[1], [1, 2], [1, 2, 3] = 1 + 1 + 1
-[2], [2, 3] = 2 + 2
-[3] = 3
-
-[1], [1, 3], [1, 3, 2] = 1 + 1 + 1
-[3], [3, 2] = 3 + 2
-[2] = 2
-
-[2], [2, 1], [2, 1, 3] = 2 + 1 + 1
-[1], [1, 3] = 1 + 1
-[3] = 3
-
-[2], [2, 3], [2, 3, 1] = 2 + 2 + 1
-[3], [3, 1] = 3 + 1
-[1] = 1
-```
+| Permutation   | Subarrays | $$S(p)$$ values | Sum of $$S(p)$$s | 
+|---------------|-----------|-----------------|------------------|
+| $$[1, 2, 3]$$ | $$[1], [1, 2], [1, 2, 3]$$<br>$$[2], [2, 3]$$<br>$$[3]$$ | $$1, 1, 1$$<br>$$2, 2$$<br>$$3$$ | $$10$$
+| $$[1, 3, 2]$$ | $$[1], [1, 3], [1, 3, 2]$$<br>$$[3], [3, 2]$$<br>$$[2]$$ | $$1, 1, 1$$<br>$$3, 2$$<br>$$2$$ | $$10$$
+| $$[2, 1, 3]$$ | $$[2], [2, 1], [2, 1, 3]$$<br>$$[1], [1, 3]$$<br>$$[3]$$ | $$2, 1, 1$$<br>$$1, 1$$<br>$$3$$ | $$9$$
+| $$[2, 3, 1]$$ | $$[2], [2, 3], [2, 3, 1]$$<br>$$[3], [3, 1]$$<br>$$[1]$$ | $$2, 2, 1$$<br>$$3, 1$$<br>$$1$$ | $$10$$
 
 Here, the maximum sum is $$10$$, achieved only by the permutations $$[1, 2, 3]$$, $$[1, 3, 2]$$, and $$[2, 3, 1]$$. Now, what is the characteristic of these permutations?
 
@@ -122,5 +105,5 @@ The ordering can be encoded as a binary string of length $$n-1$$. Each set bit i
 
 ## Caveats
 
-* There may not be as many as $$k$$ permutations with maximum sum. In those cases, the problem asks to return $$-1$$.
+* For any given $$n$$, there can be $$2^{n-1}$$ permutations yielding the maximum sum. If $$k$$ is greater than that, the permutation doesn't exist.
 * Checking for $$k$$ needs bit additional care, because $$2^{n-1}$$ will overflow as the bound of $$n$$ $$2 × 10^{5}$$ is very large. For $$n > 40$$ the number of desired permutations ($$1,099,511,627,776$$ close to $$10^{12}$$) exceeds the bound of $$k$$ ($$10^{12}$$). Therefore, the check $$k < 2^{n-1}$$ is necessary only for $$n < 40$$.
